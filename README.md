@@ -9,4 +9,4 @@ Flotte greier =)
 
 ...og for å revertere:
 
-    
+    git update-index --no-assume-unchanged awazone-web/src/main/java/no/javazone/activities/TwitterSecrets.java
