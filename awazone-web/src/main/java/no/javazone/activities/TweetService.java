@@ -1,0 +1,105 @@
+package no.javazone.activities;
+
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.transform;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+
+import no.javazone.representations.Feilmelding;
+import no.javazone.representations.Tweet;
+import no.javazone.representations.TwitterList;
+
+import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.RateLimitStatus;
+import twitter4j.Status;
+import twitter4j.StatusUpdate;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+
+import com.google.common.base.Function;
+
+public class TweetService {
+
+	private static final Logger LOG = LoggerFactory.getLogger(TweetService.class);
+
+	private static final int CACHE_TID_MINUTTER = 1;
+	private final Map<String, TwitterList> cache = new ConcurrentHashMap<String, TwitterList>();
+
+	private static TweetService tweetServiceSingelton;
+
+	private final Twitter twitter;
+
+	public TweetService() {
+		twitter = TwitterPålogger.hentTwitterObjekt();
+	}
+
+	public TwitterList søk(final String søkeord) {
+		try {
+			QueryResult result = twitter.search(new Query(søkeord));
+
+			ArrayList<Tweet> tweets = newArrayList(transform(result.getTweets(), new Function<Status, Tweet>() {
+				@Override
+				public Tweet apply(final Status status) {
+					return new Tweet(status.getUser().getScreenName(), status.getText());
+				}
+			}));
+
+			return new TwitterList(new DateTime(), tweets);
+		} catch (TwitterException e) {
+			throw loggFeilOgKastFeilmelding(e);
+		}
+	}
+
+	public TwitterList søkMedCache(final String søkeord) {
+		TwitterList cachetListe = cache.get(søkeord);
+		if (cachetListe != null && cachetListe.erNyereEnnMinutter(CACHE_TID_MINUTTER)) {
+			return cachetListe;
+		} else {
+			LOG.info("Søk på " + søkeord + " fantes ikke i cache, eller var over " + CACHE_TID_MINUTTER
+					+ " minutt gammel. Søker mot twitter...");
+			TwitterList twitterList = søk(søkeord);
+			cache.put(søkeord, twitterList);
+			return twitterList;
+		}
+	}
+
+	public Map<String, RateLimitStatus> ratelimit() {
+		try {
+			return twitter.getRateLimitStatus();
+		} catch (TwitterException e) {
+			throw loggFeilOgKastFeilmelding(e);
+		}
+	}
+
+	public void post(final String melding) {
+		try {
+			StatusUpdate statusUpdate = new StatusUpdate(melding);
+			twitter.updateStatus(statusUpdate);
+		} catch (TwitterException e) {
+			throw loggFeilOgKastFeilmelding(e);
+		}
+	}
+
+	// TODO: bruke noe annet enn singelton-patternet!
+	public static TweetService getInstance() {
+		if (tweetServiceSingelton == null) {
+			tweetServiceSingelton = new TweetService();
+		}
+		return tweetServiceSingelton;
+	}
+
+	private WebApplicationException loggFeilOgKastFeilmelding(final TwitterException e) {
+		LOG.warn("Fikk feil fra twitter!", e);
+		return new WebApplicationException(Response.serverError().entity(new Feilmelding("Fikk feil fra twitter")).build());
+	}
+}
