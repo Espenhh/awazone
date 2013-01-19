@@ -40,7 +40,7 @@ public class TweetService {
 	private final Twitter twitter;
 
 	public TweetService() {
-		twitter = TwitterPålogger.hentTwitterObjekt();
+		twitter = TwitterPalogger.hentTwitterObjekt();
 	}
 
 	public TwitterList søk(final String søkeord) {

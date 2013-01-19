@@ -4,7 +4,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
-public class TwitterPålogger {
+public class TwitterPalogger {
 	public static Twitter hentTwitterObjekt() {
 		TwitterFactory factory = new TwitterFactory();
 		Twitter twitter = factory.getInstance();
