@@ -13,5 +13,10 @@ Flotte greier =)
 
 ## Deploying
 
+Stå i `awazone-web` og bygg ny `.jar`-fil:
+
 	mvn package
+
+Stå i rotmappa og kjør deploy-scriptet:
+
 	./deploy.sh
