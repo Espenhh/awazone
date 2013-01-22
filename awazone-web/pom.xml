@@ -11,6 +11,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-bundle</artifactId>
+			<version>1.8-ea03</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
 			<version>1.16</version>
 		</dependency>
@@ -68,14 +73,12 @@
 			<version>r05</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
 
 	<build>
