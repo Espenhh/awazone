@@ -25,7 +25,22 @@ public class TweetResource {
 
 	@GET
 	@Produces(APPLICATION_JSON)
-	public Response getTweet(@QueryParam("search") final String searchQuery) {
+	public Response getOwnTweets() {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+
+		TwitterList tweets = tweetService.hentEgneTweetsCached();
+
+		stopWatch.stop();
+
+		LOG.info("Henting av egne tweets tok " + stopWatch.getTime() + "ms");
+		return Response.ok(tweets).build();
+	}
+
+	@GET
+	@Path("/search")
+	@Produces(APPLICATION_JSON)
+	public Response searchForTweets(@QueryParam("search") final String searchQuery) {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
@@ -36,7 +51,6 @@ public class TweetResource {
 
 		LOG.info("Søket på " + søkeord + " tok " + stopWatch.getTime() + "ms");
 		return Response.ok(tweets).build();
-
 	}
 
 }

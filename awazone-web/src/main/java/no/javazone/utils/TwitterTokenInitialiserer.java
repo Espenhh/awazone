@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 
-import no.javazone.server.PropertiesLoader;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +18,12 @@ import twitter4j.auth.RequestToken;
 public class TwitterTokenInitialiserer {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TwitterTokenInitialiserer.class);
+	private static final String CUSTOMER_KEY = "FYLLINN";
+	private static final String CUSTOMER_SECRET = "FYLLINN";
 
 	public static void main(final String[] args) throws TwitterException, IOException {
 		Twitter twitter = TwitterFactory.getSingleton();
-		twitter.setOAuthConsumer(PropertiesLoader.getProperty("twitter.customer.key"),
-				PropertiesLoader.getProperty("twitter.customer.secret"));
+		twitter.setOAuthConsumer(CUSTOMER_KEY, CUSTOMER_SECRET);
 		RequestToken requestToken = twitter.getOAuthRequestToken();
 		AccessToken accessToken = null;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

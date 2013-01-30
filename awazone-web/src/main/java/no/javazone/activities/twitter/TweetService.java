@@ -4,6 +4,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.RateLimitStatus;
+import twitter4j.ResponseList;
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -34,6 +36,7 @@ public class TweetService {
 
 	private static final int CACHE_TID_MINUTTER = 1;
 	private final Map<String, TwitterList> cache = new ConcurrentHashMap<String, TwitterList>();
+	private TwitterList egneTweetsCache;
 
 	private static TweetService tweetServiceSingelton;
 
@@ -47,12 +50,7 @@ public class TweetService {
 		try {
 			QueryResult result = twitter.search(new Query(søkeord));
 
-			ArrayList<Tweet> tweets = newArrayList(transform(result.getTweets(), new Function<Status, Tweet>() {
-				@Override
-				public Tweet apply(final Status status) {
-					return new Tweet(status.getUser().getScreenName(), status.getText());
-				}
-			}));
+			ArrayList<Tweet> tweets = statusListToTweets(result.getTweets());
 
 			return new TwitterList(new DateTime(), tweets);
 		} catch (TwitterException e) {
@@ -70,6 +68,26 @@ public class TweetService {
 			TwitterList twitterList = søk(søkeord);
 			cache.put(søkeord, twitterList);
 			return twitterList;
+		}
+	}
+
+	public TwitterList hentEgneTweets() {
+		try {
+			ResponseList<Status> userTimeline = twitter.getUserTimeline();
+			ArrayList<Tweet> tweets = statusListToTweets(userTimeline);
+			return new TwitterList(new DateTime(), tweets);
+		} catch (TwitterException e) {
+			throw loggFeilOgKastFeilmelding(e);
+		}
+	}
+
+	public TwitterList hentEgneTweetsCached() {
+		if (egneTweetsCache != null && egneTweetsCache.erNyereEnnMinutter(CACHE_TID_MINUTTER)) {
+			return egneTweetsCache;
+		} else {
+			LOG.info("Egne tweets fantes ikke i cache, eller var over " + CACHE_TID_MINUTTER + " minutt gammel. Henter fra twitter...");
+			egneTweetsCache = hentEgneTweets();
+			return egneTweetsCache;
 		}
 	}
 
@@ -96,6 +114,16 @@ public class TweetService {
 			tweetServiceSingelton = new TweetService();
 		}
 		return tweetServiceSingelton;
+	}
+
+	private ArrayList<Tweet> statusListToTweets(final List<Status> list) {
+		ArrayList<Tweet> tweets = newArrayList(transform(list, new Function<Status, Tweet>() {
+			@Override
+			public Tweet apply(final Status status) {
+				return new Tweet(status.getUser().getScreenName(), status.getText());
+			}
+		}));
+		return tweets;
 	}
 
 	private WebApplicationException loggFeilOgKastFeilmelding(final TwitterException e) {
