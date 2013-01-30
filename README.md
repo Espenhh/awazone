@@ -1,21 +1,18 @@
 API for diverse ting til javazone.no
 =======
 
-Flotte greier =)
+## Utvikling lokalt
 
-## For å unngå å sjekke inn twitter-secrets-fila:
+Du trenger maven og en måte å kjøre opp java på (f.eks fra eclipse)
 
-    git update-index --assume-unchanged awazone-web/src/main/java/no/javazone/activities/TwitterSecrets.java
+Kopier filen mal.properties, fyll inn riktige properties (twitter OAuto token etc.), og legg den et sted du ikke sjekker den inn...
 
-...og for å revertere:
+Start så klassen `WebServerMail.java` med følgende VM-argument:
 
-    git update-index --no-assume-unchanged awazone-web/src/main/java/no/javazone/activities/TwitterSecrets.java
+    -DpropertyFile=/path/til/properties/fil/jz.properties
+
 
 ## Deploying
-
-Stå i `awazone-web` og bygg ny `.jar`-fil:
-
-	mvn package
 
 Stå i rotmappa og kjør deploy-scriptet:
 
