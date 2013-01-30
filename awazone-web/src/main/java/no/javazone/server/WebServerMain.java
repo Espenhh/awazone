@@ -27,8 +27,8 @@ public class WebServerMain {
 		context.addServlet(h, "/*");
 		try {
 			server.start();
-			server.join();
 			LOG.info("Server startet på port " + port);
+			server.join();
 		} catch (Exception e) {
 			LOG.error("Kunne ikke starte server!", e);
 		}

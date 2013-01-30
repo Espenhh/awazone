@@ -18,13 +18,15 @@ public class PropertiesLoader {
 	public static void initialize() {
 		try {
 			String propertyFilePath = System.getProperty("propertyFile");
-			System.out.println("Laster properties fra filen: " + propertyFilePath);
+			LOG.info("Laster properties fra filen: " + propertyFilePath);
+			LOG.info("--------PROPERTIES-----------");
 			File propertyFile = new File(propertyFilePath);
 			properties = new Properties();
 			properties.load(new FileInputStream(propertyFile));
 			for (Object key : properties.keySet()) {
 				LOG.info(key + "=" + properties.getProperty(key.toString()));
 			}
+			LOG.info("-----------------------------");
 		} catch (FileNotFoundException e) {
 			LOG.error("Kunne ikke laste properties", e);
 		} catch (IOException e) {
