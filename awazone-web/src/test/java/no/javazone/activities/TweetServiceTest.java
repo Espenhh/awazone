@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import twitter4j.RateLimitStatus;
 
+@Ignore
 public class TweetServiceTest {
 
 	private TweetService tweetService;

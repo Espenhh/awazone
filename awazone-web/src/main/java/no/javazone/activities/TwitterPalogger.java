@@ -1,5 +1,6 @@
 package no.javazone.activities;
 
+import no.javazone.server.PropertiesLoader;
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
@@ -8,8 +9,10 @@ public class TwitterPalogger {
 	public static Twitter hentTwitterObjekt() {
 		TwitterFactory factory = new TwitterFactory();
 		Twitter twitter = factory.getInstance();
-		twitter.setOAuthConsumer(TwitterSecrets.CUSTOMER_KEY, TwitterSecrets.CUSTOMER_SECRET);
-		twitter.setOAuthAccessToken(new AccessToken(TwitterSecrets.USER_TOKEN, TwitterSecrets.USER_TOKEN_SECRET));
+		twitter.setOAuthConsumer(PropertiesLoader.getProperty("twitter.customer.key"),
+				PropertiesLoader.getProperty("twitter.customer.secret"));
+		twitter.setOAuthAccessToken(new AccessToken(PropertiesLoader.getProperty("twitter.user.token"), PropertiesLoader
+				.getProperty("twitter.user.token.secret")));
 		return twitter;
 	}
 }

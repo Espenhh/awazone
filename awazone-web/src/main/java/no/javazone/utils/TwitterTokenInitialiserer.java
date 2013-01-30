@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 
-import no.javazone.activities.TwitterSecrets;
+import no.javazone.server.PropertiesLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,8 @@ public class TwitterTokenInitialiserer {
 
 	public static void main(final String[] args) throws TwitterException, IOException {
 		Twitter twitter = TwitterFactory.getSingleton();
-		twitter.setOAuthConsumer(TwitterSecrets.CUSTOMER_KEY, TwitterSecrets.CUSTOMER_SECRET);
+		twitter.setOAuthConsumer(PropertiesLoader.getProperty("twitter.customer.key"),
+				PropertiesLoader.getProperty("twitter.customer.secret"));
 		RequestToken requestToken = twitter.getOAuthRequestToken();
 		AccessToken accessToken = null;
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

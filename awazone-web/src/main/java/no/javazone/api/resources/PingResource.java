@@ -16,4 +16,12 @@ public class PingResource {
 		return Response.ok("pong").build();
 	}
 
+	@GET
+	@Path("/e")
+	@Produces(TEXT_PLAIN)
+	public Response pling() {
+
+		return Response.ok("lol").build();
+	}
+
 }
