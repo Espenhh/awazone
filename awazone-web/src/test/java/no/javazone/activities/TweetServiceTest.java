@@ -3,7 +3,8 @@ package no.javazone.activities;
 import java.util.List;
 import java.util.Map;
 
-import no.javazone.representations.Tweet;
+import no.javazone.activities.twitter.TweetService;
+import no.javazone.representations.twitter.Tweet;
 
 import org.junit.Before;
 import org.junit.Ignore;

@@ -1,4 +1,4 @@
-package no.javazone.representations;
+package no.javazone.representations.twitter;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 

@@ -1,4 +1,4 @@
-package no.javazone.activities;
+package no.javazone.activities.twitter;
 
 import no.javazone.server.PropertiesLoader;
 import twitter4j.Twitter;

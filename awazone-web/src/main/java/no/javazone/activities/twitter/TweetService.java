@@ -1,4 +1,4 @@
-package no.javazone.activities;
+package no.javazone.activities.twitter;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.transform;
@@ -11,8 +11,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
 import no.javazone.representations.Feilmelding;
-import no.javazone.representations.Tweet;
-import no.javazone.representations.TwitterList;
+import no.javazone.representations.twitter.Tweet;
+import no.javazone.representations.twitter.TwitterList;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;

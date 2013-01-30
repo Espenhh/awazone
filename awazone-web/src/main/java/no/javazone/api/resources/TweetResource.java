@@ -8,8 +8,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
-import no.javazone.activities.TweetService;
-import no.javazone.representations.TwitterList;
+import no.javazone.activities.twitter.TweetService;
+import no.javazone.representations.twitter.TwitterList;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
