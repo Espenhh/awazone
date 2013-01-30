@@ -24,6 +24,14 @@ _readWithDefault() {
     echo $answer
 }
 
+info "BYGGER"
+cd awazone-web
+mvn package
+
+info "DEPLOY"
+cd ..
+
+
 
 
 yellow ""
