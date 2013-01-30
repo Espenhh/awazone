@@ -29,7 +29,7 @@ public class BlogResource {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		List<Bloggpost> poster = wordpressService.hentBloggposter().getPosts();
+		List<Bloggpost> poster = wordpressService.hentBloggposterCachet().getPosts();
 
 		stopWatch.stop();
 
