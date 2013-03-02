@@ -17,3 +17,5 @@ Start så klassen `WebServerMain.java` med følgende VM-argument:
 Stå i rotmappa og kjør deploy-scriptet:
 
 	./deploy.sh
+
+Scriptet prompter for *miljø*, *jar-fil* og *versjonsnavn*.

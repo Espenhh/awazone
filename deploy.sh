@@ -27,16 +27,11 @@ _readWithDefault() {
 info "BYGGER"
 cd awazone-web
 mvn package
-
-info "DEPLOY"
 cd ..
 
-
-
-
 yellow ""
-yellow "  deployer                                "
-yellow "                                          "
+yellow "  deployer"
+yellow ""
 yellow "      #  ######            ##    #####   #"
 yellow "      #      #            #  #   #    #  #"
 yellow "      #     #    #####   #    #  #    #  #"
