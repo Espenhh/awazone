@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bloggposter {
 
+	@SuppressWarnings("unused")
 	@JsonProperty
 	private int found;
 
