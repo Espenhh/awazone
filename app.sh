@@ -11,7 +11,7 @@ fail() {
 }
 
 if [ ! $# -eq 2 ]; then
-	info "Bruk: ./app.sh [start|stop] [test|prod]"
+	info "Bruk: ./app.sh [start|stop|status] [test|prod]"
 	exit 1
 fi
 
@@ -21,8 +21,18 @@ if [[ $env != "prod" && $env != "test" ]]; then
 fi
 
 cmd=$1
-if [[ $cmd != "start" && $cmd != "stop" ]]; then
+if [[ $cmd != "start" && $cmd != "stop" && $cmd != "status" ]]; then
 	fail "Kjenner ikke kommandoen '$cmd'. mente du 'start' eller 'stop'?"
+fi
+
+if [ $cmd = "status" ]; then
+	pidfile=$env/pid
+	if [ -f $pidfile ]; then
+		pid=`cat $pidfile`
+		info "$env kjører (med PID $pid)"
+	else
+		warn "Det ser ikke ut til at $env kjører"
+	fi
 fi
 
 if [ $cmd = "start" ]; then
