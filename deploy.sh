@@ -35,14 +35,14 @@ cd ..
 
 
 yellow ""
-yellow "  deployer                                   "
-yellow "                                             "
-yellow "      #  ######            ##    #####      #"
-yellow "      #      #            #  #   #    #     #"
-yellow "      #     #    #####   #    #  #    #     #"
-yellow "      #    #             ######  #####      #"
-yellow " #    #   #              #    #  #          #"
-yellow "  ####   ######          #    #  #          #"
+yellow "  deployer                                "
+yellow "                                          "
+yellow "      #  ######            ##    #####   #"
+yellow "      #      #            #  #   #    #  #"
+yellow "      #     #    #####   #    #  #    #  #"
+yellow "      #    #             ######  #####   #"
+yellow " #    #   #              #    #  #       #"
+yellow "  ####   ######          #    #  #       #"
 yellow ""
 
 DEFAULT_JAR=`find . | grep dependencies.jar`
@@ -71,7 +71,5 @@ BASE="~/web/api-app/$ENV"
 ssh javabin@javazone.espenhh.com "mkdir -p $BASE/$VERSION"
 scp $JAR javabin@javazone.espenhh.com:$BASE/$VERSION/awazone.jar
 ssh javabin@javazone.espenhh.com "ln -s -f $VERSION -T $BASE/current"
-ssh javabin@javazone.espenhh.com "$BASE/app.sh stop"
-ssh javabin@javazone.espenhh.com "$BASE/app.sh start"
-
-yellow "le done"
+ssh javabin@javazone.espenhh.com "~/web/api-app/app.sh stop $ENV"
+ssh javabin@javazone.espenhh.com "~/web/api-app/app.sh start $ENV"
