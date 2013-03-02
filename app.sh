@@ -27,7 +27,8 @@ fi
 
 if [ $cmd = "start" ]; then
 	props="/home/javabin/web/api-app/$env/$env.properties"
-	java -DpropertyFile=$props -jar $env/current/awazone.jar 2>> $env/logs/error.log >> $env/logs/server.log &
+	logs="/home/javabin/webapp/api-app/$env/logs"
+	java -DpropertyFile=$props -DlogDirectory=$logs -jar $env/current/awazone.jar 2>> $env/logs/error.log >> $env/logs/server.log &
 	PID=$!
 	echo $PID > $env/pid
 	info "Startet app med PID $PID i $env"
