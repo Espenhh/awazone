@@ -1,7 +1,7 @@
 package no.javazone.activities.ems;
 
-import no.javazone.representations.sessions.ConferenceYear;
-import no.javazone.representations.sessions.Session;
+import no.javazone.activities.ems.model.ConferenceYear;
+import no.javazone.activities.ems.model.EmsSession;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class EmsServiceTest {
 		emsService.refresh();
 		ConferenceYear conferenceYear = emsService.getConferenceYear();
 		System.out.println("Refreshed: " + conferenceYear.getLastTimeRefreshed());
-		for (Session session : conferenceYear.getSessions()) {
+		for (EmsSession session : conferenceYear.getSessions()) {
 			System.out.println(session.toString());
 		}
 	}

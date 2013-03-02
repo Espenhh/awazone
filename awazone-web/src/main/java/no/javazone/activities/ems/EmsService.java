@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response.Status;
 
 import net.hamnaberg.json.Collection;
 import net.hamnaberg.json.parser.CollectionParser;
-import no.javazone.representations.sessions.ConferenceYear;
-import no.javazone.representations.sessions.Session;
+import no.javazone.activities.ems.model.ConferenceYear;
+import no.javazone.activities.ems.model.EmsSession;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.joda.time.DateTime;
@@ -52,7 +52,7 @@ public class EmsService {
 			InputStream stream = jerseyClient.resource(SESSION_LINK_2012).get(InputStream.class);
 			Collection collection = new CollectionParser().parse(stream);
 
-			ArrayList<Session> sessions = newArrayList(transform(collection.getItems(), Session.collectionToSessions()));
+			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionToSessions()));
 			conferenceYear2012 = new ConferenceYear(sessions, new DateTime());
 
 			long bruktTid = s.getTime();

@@ -1,36 +1,24 @@
-package no.javazone.representations.sessions;
+package no.javazone.activities.ems.model;
 
 import net.hamnaberg.json.Item;
 import net.hamnaberg.json.Property;
 import net.hamnaberg.json.Value;
 import net.hamnaberg.json.util.Optional;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.annotate.JsonProperty;
-
 import com.google.common.base.Function;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Session {
+public class EmsSession {
 
-	@JsonProperty("title")
 	private final String title;
-	@JsonProperty("summary")
 	private final String summary;
-	@JsonProperty("outline")
 	private final String outline;
-	@JsonProperty("body")
 	private final String body;
-	@JsonProperty("format")
 	private final String format;
-	@JsonProperty("audience")
 	private final String audience;
-	@JsonProperty("level")
 	private final String level;
-	@JsonProperty("lang")
 	private final String lang;
 
-	public Session(final String title, final String summary, final String outline, final String body, final String format,
+	public EmsSession(final String title, final String summary, final String outline, final String body, final String format,
 			final String audience, final String level, final String lang) {
 		this.title = title;
 		this.summary = summary;
@@ -79,10 +67,10 @@ public class Session {
 		return "Session [title=" + title + "]";
 	}
 
-	public static Function<Item, Session> collectionToSessions() {
-		return new Function<Item, Session>() {
+	public static Function<Item, EmsSession> collectionToSessions() {
+		return new Function<Item, EmsSession>() {
 			@Override
-			public Session apply(final Item item) {
+			public EmsSession apply(final Item item) {
 				String title = getStringValue(item, "title");
 				String summary = getStringValue(item, "summary");
 				String outline = getStringValue(item, "outline");
@@ -92,7 +80,7 @@ public class Session {
 				String level = getStringValue(item, "level");
 				String lang = getStringValue(item, "lang");
 
-				return new Session(title, summary, outline, body, format, audience, level, lang);
+				return new EmsSession(title, summary, outline, body, format, audience, level, lang);
 			}
 
 			private String getStringValue(final Item item, final String key) {
