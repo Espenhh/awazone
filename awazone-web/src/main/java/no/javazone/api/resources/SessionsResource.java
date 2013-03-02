@@ -34,7 +34,7 @@ public class SessionsResource {
 	@Produces(TEXT_PLAIN)
 	public String refresh() {
 		long bruktTid = emsService.refresh();
-		return String.format("%s: Sessions ble oppdatert fra EMS. Tok %s millisekunder", new DateTime().toString(), bruktTid);
+		return String.format("%s: Sessions ble oppdatert fra EMS. Tok %s millisekunder\n", new DateTime().toString(), bruktTid);
 	}
 
 }

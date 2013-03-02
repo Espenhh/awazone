@@ -63,7 +63,7 @@ public class EmsService {
 			LOG.warn("Kunne ikke refreshe sessions fra EMS – fikk feil...", e);
 			Response response = Response
 					.status(Status.SERVICE_UNAVAILABLE)
-					.entity(String.format("%s: Refresh av sessions fra EMS feilet", new DateTime().toString()))
+					.entity(String.format("%s: Refresh av sessions fra EMS feilet\n", new DateTime().toString()))
 					.build();
 			throw new WebApplicationException(response);
 		}
