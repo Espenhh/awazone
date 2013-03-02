@@ -5,8 +5,8 @@ cd `dirname $0`
 
 info() { echo -e "\033[1;32m:) $1\033[0m"; }
 warn() { echo -e "\033[1;33m:| $1\033[0m"; }
-fail() { 
-	echo -e "\033[1;31m:( $1\033[0m"; 
+fail() {
+	echo -e "\033[1;31m:( $1\033[0m";
 	exit 1
 }
 
@@ -27,7 +27,7 @@ fi
 
 if [ $cmd = "start" ]; then
 	props="/home/javabin/web/api-app/$env/$env.properties"
-	logs="/home/javabin/webapp/api-app/$env/logs"
+	logs="/home/javabin/web/api-app/$env/logs"
 	java -DpropertyFile=$props -DlogDirectory=$logs -jar $env/current/awazone.jar 2>> $env/logs/error.log >> $env/logs/server.log &
 	PID=$!
 	echo $PID > $env/pid
