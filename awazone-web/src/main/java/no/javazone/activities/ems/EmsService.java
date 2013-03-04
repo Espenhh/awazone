@@ -32,6 +32,8 @@ public class EmsService {
 	// TODO: start fra rotressurs for å finne linken... Ikke hardkod ;)
 	private static final String SESSION_LINK_2012 = "http://www.javazone.no/ems/server/events/4c18f45a-054a-4699-a2bc-6a59a9dd8382/sessions";
 
+	// Test: http://test.java.no/ems-redux/server
+
 	private static EmsService instance;
 
 	private final Client jerseyClient;
