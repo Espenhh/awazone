@@ -23,12 +23,13 @@ public class EmsSession {
 	private final String audience;
 	private final String level;
 	private final String lang;
+	private final String room;
 	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
-			final String format, final String audience, final String level, final String lang, final List<String> speakerNames,
-			final Optional<Link> speakerLink) {
+			final String format, final String audience, final String level, final String lang, final String room,
+			final List<String> speakerNames, final Optional<Link> speakerLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -38,6 +39,7 @@ public class EmsSession {
 		this.audience = audience;
 		this.level = level;
 		this.lang = lang;
+		this.room = room;
 		this.speakerNames = speakerNames;
 		this.speakerLink = speakerLink;
 	}
@@ -78,6 +80,10 @@ public class EmsSession {
 		return lang;
 	}
 
+	public String getRoom() {
+		return room;
+	}
+
 	public List<String> getSpeakerNames() {
 		return speakerNames;
 	}
@@ -108,9 +114,23 @@ public class EmsSession {
 
 				List<String> speakerNames = extractSpeakerNames(item);
 
+				String room = extractRoom(item);
+
 				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
 
-				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, speakerNames, speakerLink);
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, speakerNames, speakerLink);
+			}
+
+			private String extractRoom(final Item item) {
+				Optional<Link> roomLink = ItemHelper.getLink(item, "room item");
+				if (roomLink.isNone()) {
+					return "";
+				}
+				Optional<String> roomPrompt = roomLink.get().getPrompt();
+				if (roomPrompt.isNone()) {
+					return "";
+				}
+				return roomPrompt.get();
 			}
 
 			private List<String> extractSpeakerNames(final Item item) {

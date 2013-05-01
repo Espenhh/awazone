@@ -22,6 +22,8 @@ public class Session {
 	private final String lang;
 	@JsonProperty("audience")
 	private final String audience;
+	@JsonProperty("room")
+	private final String room;
 	@JsonProperty("body")
 	private final String body;
 	@JsonProperty("summary")
@@ -34,12 +36,14 @@ public class Session {
 	private final List<Link> links;
 
 	public Session(final String title, final String format, final String level, final String lang, final String audience,
-			final String body, final String summary, final String outline, final List<Speaker> speakers, final List<Link> links) {
+			final String room, final String body, final String summary, final String outline, final List<Speaker> speakers,
+			final List<Link> links) {
 		this.title = title;
 		this.format = format;
 		this.level = level;
 		this.lang = lang;
 		this.audience = audience;
+		this.room = room;
 		this.body = body;
 		this.summary = summary;
 		this.outline = outline;
@@ -49,7 +53,7 @@ public class Session {
 
 	public static Session createSession(final EmsSession emsSession, final List<EmsSpeaker> speakers) {
 		return new Session(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
-				emsSession.getAudience(), emsSession.getBody(), emsSession.getSummary(), emsSession.getOutline(),
+				emsSession.getAudience(), emsSession.getRoom(), emsSession.getBody(), emsSession.getSummary(), emsSession.getOutline(),
 				Speaker.createSpeakers(speakers), createLinks(emsSession));
 	}
 
