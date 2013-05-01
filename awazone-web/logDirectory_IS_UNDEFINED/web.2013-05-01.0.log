@@ -77,3 +77,19 @@
 2013.05.01 17:15:22.521 INFO  no.javazone.server.WebServerMain - Server startet på port 12345
 2013.05.01 17:15:22.657 INFO  n.javazone.activities.ems.EmsService - Starter innlasting av sessions for 2013 fra EMS
 2013.05.01 17:15:24.005 INFO  n.javazone.activities.ems.EmsService - Lastet session for 2013 fra EMS på 1345 ms.
+2013.05.01 17:18:32.655 INFO  no.javazone.server.PropertiesLoader - Laster properties fra filen: /Users/eh/javazone.properties
+2013.05.01 17:18:32.658 INFO  no.javazone.server.PropertiesLoader - --------PROPERTIES-----------
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - twitter.user.token.secret=G6uvvHvWo7N2JCCXOKWsaaV1sRJOVhzBSsHUNodttSE
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - server.port=12345
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - twitter.user.token=15148494-9SIMbZE5m5cKt0iZXBB2R8kfHkELei8LxdIGW4xHc
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - twitter.customer.key=AYAeP157WDeOzUSnh14AuA
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - wordpress.rooturl=https://public-api.wordpress.com/rest/v1/sites/46283686
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - twitter.customer.secret=HXl7CLnWFsPz3LM4B9S7wSsQffEP75uion0yFwhXu90
+2013.05.01 17:18:32.659 INFO  no.javazone.server.PropertiesLoader - server.proxy=http://localhost:12345
+2013.05.01 17:18:32.660 INFO  no.javazone.server.PropertiesLoader - -----------------------------
+2013.05.01 17:18:32.738 INFO  org.eclipse.jetty.server.Server - jetty-7.5.4.v20111024
+2013.05.01 17:18:32.828 INFO  o.e.j.server.handler.ContextHandler - started o.e.j.s.ServletContextHandler{/,null}
+2013.05.01 17:18:33.705 INFO  o.e.jetty.server.AbstractConnector - Started SelectChannelConnector@0.0.0.0:12345 STARTING
+2013.05.01 17:18:33.713 INFO  no.javazone.server.WebServerMain - Server startet på port 12345
+2013.05.01 17:18:33.846 INFO  n.javazone.activities.ems.EmsService - Starter innlasting av sessions for 2013 fra EMS
+2013.05.01 17:18:35.420 INFO  n.javazone.activities.ems.EmsService - Lastet session for 2013 fra EMS på 1571 ms.

@@ -36,9 +36,9 @@ public class ItemHelper {
 
 	private static MessageDigest getMda() {
 		try {
-			return MessageDigest.getInstance("SHA-512");
+			return MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			LOG.error("Kunne ikke lage SHA-512", e);
+			LOG.error("Kunne ikke lage SHA-256", e);
 			throw new IllegalStateException();
 		}
 	}
