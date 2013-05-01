@@ -7,12 +7,14 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import no.javazone.activities.ems.EmsService;
 import no.javazone.activities.ems.SessionsActivity;
 import no.javazone.api.filters.NoCacheResponseFilter;
+import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
 
 import org.joda.time.DateTime;
@@ -31,6 +33,14 @@ public class SessionsResource {
 	public Response getSimpleSessions() {
 		List<SimpleSession> simpleSessions = sessionsActivity.getSimpleSessions();
 		return Response.ok(simpleSessions).build();
+	}
+
+	@GET
+	@Path("/{id}")
+	@Produces(APPLICATION_JSON)
+	public Response getSession(@PathParam("id") final String id) {
+		Session session = sessionsActivity.getSession(id);
+		return Response.ok(session).build();
 	}
 
 	@GET

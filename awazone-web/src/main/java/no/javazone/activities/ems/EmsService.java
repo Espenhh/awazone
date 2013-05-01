@@ -5,6 +5,8 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import javax.ws.rs.WebApplicationException;
@@ -37,12 +39,18 @@ public class EmsService {
 	private static EmsService instance;
 
 	private final Client jerseyClient;
+	private MessageDigest mda;
 
 	private ConferenceYear conferenceYear2012 = null;
 
 	private EmsService() {
 		ClientConfig config = new DefaultClientConfig();
 		jerseyClient = Client.create(config);
+		try {
+			mda = MessageDigest.getInstance("SHA-512");
+		} catch (NoSuchAlgorithmException e) {
+			LOG.error("Kunne ikke lage SHA-512", e);
+		}
 	}
 
 	public long refresh() {
@@ -54,7 +62,7 @@ public class EmsService {
 			InputStream stream = jerseyClient.resource(SESSION_LINK_2012).get(InputStream.class);
 			Collection collection = new CollectionParser().parse(stream);
 
-			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionToSessions()));
+			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionToSessions(mda)));
 			conferenceYear2012 = new ConferenceYear(sessions, new DateTime());
 
 			long bruktTid = s.getTime();
@@ -83,5 +91,14 @@ public class EmsService {
 			instance = new EmsService();
 		}
 		return instance;
+	}
+
+	public EmsSession getSession(final String id) {
+		for (EmsSession session : conferenceYear2012.getSessions()) {
+			if (session.getId().equals(id)) {
+				return session;
+			}
+		}
+		return null;
 	}
 }

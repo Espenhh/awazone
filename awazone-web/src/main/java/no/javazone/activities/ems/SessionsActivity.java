@@ -5,7 +5,12 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response.Status;
+
 import no.javazone.activities.ems.model.ConferenceYear;
+import no.javazone.activities.ems.model.EmsSession;
+import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
 
 public class SessionsActivity {
@@ -27,6 +32,14 @@ public class SessionsActivity {
 			instance = new SessionsActivity();
 		}
 		return instance;
+	}
+
+	public Session getSession(final String id) {
+		EmsSession emsSession = emsService.getSession(id);
+		if (emsSession == null) {
+			throw new WebApplicationException(Status.NOT_FOUND);
+		}
+		return Session.emsSessionToSession().apply(emsSession);
 	}
 
 }

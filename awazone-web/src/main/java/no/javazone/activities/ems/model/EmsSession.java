@@ -1,9 +1,14 @@
 package no.javazone.activities.ems.model;
 
+import java.net.URI;
+import java.security.MessageDigest;
+
 import net.hamnaberg.json.Item;
 import net.hamnaberg.json.Property;
 import net.hamnaberg.json.Value;
 import net.hamnaberg.json.util.Optional;
+
+import org.apache.commons.codec.binary.Hex;
 
 import com.google.common.base.Function;
 
@@ -17,9 +22,11 @@ public class EmsSession {
 	private final String audience;
 	private final String level;
 	private final String lang;
+	private final String id;
 
-	public EmsSession(final String title, final String summary, final String outline, final String body, final String format,
-			final String audience, final String level, final String lang) {
+	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
+			final String format, final String audience, final String level, final String lang) {
+		this.id = id;
 		this.title = title;
 		this.summary = summary;
 		this.outline = outline;
@@ -28,6 +35,10 @@ public class EmsSession {
 		this.audience = audience;
 		this.level = level;
 		this.lang = lang;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getTitle() {
@@ -67,7 +78,7 @@ public class EmsSession {
 		return "Session [title=" + title + "]";
 	}
 
-	public static Function<Item, EmsSession> collectionToSessions() {
+	public static Function<Item, EmsSession> collectionToSessions(final MessageDigest mda) {
 		return new Function<Item, EmsSession>() {
 			@Override
 			public EmsSession apply(final Item item) {
@@ -80,7 +91,14 @@ public class EmsSession {
 				String level = getStringValue(item, "level");
 				String lang = getStringValue(item, "lang");
 
-				return new EmsSession(title, summary, outline, body, format, audience, level, lang);
+				String id = generateId(mda, item);
+
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang);
+			}
+
+			private String generateId(final MessageDigest mda, final Item item) {
+				URI href = item.getHref();
+				return new String(Hex.encodeHex(mda.digest(href.toString().getBytes())));
 			}
 
 			private String getStringValue(final Item item, final String key) {
