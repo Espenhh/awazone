@@ -3,3 +3,4 @@ target
 .project
 .settings
 awazone-web/logs
+awazone-web/logDirectory_IS_UNDEFINED/*

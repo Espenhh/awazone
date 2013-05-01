@@ -22,14 +22,18 @@ public class SimpleSession {
 	private final String level;
 	@JsonProperty("lang")
 	private final String lang;
+	@JsonProperty("speakers")
+	private final List<String> speakers;
 	@JsonProperty("links")
 	private final List<Link> links;
 
-	public SimpleSession(final String title, final String format, final String level, final String lang, final List<Link> links) {
+	public SimpleSession(final String title, final String format, final String level, final String lang, final List<String> speakers,
+			final List<Link> links) {
 		this.title = title;
 		this.format = format;
 		this.level = level;
 		this.lang = lang;
+		this.speakers = speakers;
 		this.links = links;
 	}
 
@@ -38,7 +42,7 @@ public class SimpleSession {
 			@Override
 			public SimpleSession apply(final EmsSession emsSession) {
 				return new SimpleSession(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
-						createLinks(emsSession));
+						emsSession.getSpeakerNames(), createLinks(emsSession));
 			}
 
 			private List<Link> createLinks(final EmsSession emsSession) {

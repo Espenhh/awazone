@@ -1,5 +1,10 @@
 package no.javazone.activities.ems.model;
 
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Lists.newArrayList;
+
+import java.util.List;
+
 import net.hamnaberg.json.Item;
 import net.hamnaberg.json.Link;
 import net.hamnaberg.json.util.Optional;
@@ -9,6 +14,7 @@ import com.google.common.base.Function;
 
 public class EmsSession {
 
+	private final String id;
 	private final String title;
 	private final String summary;
 	private final String outline;
@@ -17,11 +23,12 @@ public class EmsSession {
 	private final String audience;
 	private final String level;
 	private final String lang;
-	private final String id;
+	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
-			final String format, final String audience, final String level, final String lang, final Optional<Link> speakerLink) {
+			final String format, final String audience, final String level, final String lang, final List<String> speakerNames,
+			final Optional<Link> speakerLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -31,6 +38,7 @@ public class EmsSession {
 		this.audience = audience;
 		this.level = level;
 		this.lang = lang;
+		this.speakerNames = speakerNames;
 		this.speakerLink = speakerLink;
 	}
 
@@ -70,6 +78,10 @@ public class EmsSession {
 		return lang;
 	}
 
+	public List<String> getSpeakerNames() {
+		return speakerNames;
+	}
+
 	public Optional<Link> getSpeakerLink() {
 		return speakerLink;
 	}
@@ -83,6 +95,8 @@ public class EmsSession {
 		return new Function<Item, EmsSession>() {
 			@Override
 			public EmsSession apply(final Item item) {
+				String id = ItemHelper.generateId(item);
+
 				String title = ItemHelper.getStringValue(item, "title");
 				String summary = ItemHelper.getStringValue(item, "summary");
 				String outline = ItemHelper.getStringValue(item, "outline");
@@ -92,11 +106,26 @@ public class EmsSession {
 				String level = ItemHelper.getStringValue(item, "level");
 				String lang = ItemHelper.getStringValue(item, "lang");
 
-				String id = ItemHelper.generateId(item);
+				List<String> speakerNames = extractSpeakerNames(item);
 
 				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
 
-				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, speakerLink);
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, speakerNames, speakerLink);
+			}
+
+			private List<String> extractSpeakerNames(final Item item) {
+				List<Link> speakerLinks = ItemHelper.getLinks(item, "speaker item");
+				return newArrayList(transform(speakerLinks, new Function<Link, String>() {
+					@Override
+					public String apply(final Link link) {
+						Optional<String> prompt = link.getPrompt();
+						if (prompt.isSome()) {
+							return prompt.get();
+						} else {
+							return "";
+						}
+					}
+				}));
 			}
 
 		};

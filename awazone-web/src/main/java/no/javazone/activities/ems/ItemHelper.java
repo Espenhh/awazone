@@ -3,6 +3,7 @@ package no.javazone.activities.ems;
 import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import net.hamnaberg.json.Item;
 import net.hamnaberg.json.Link;
@@ -27,6 +28,17 @@ public class ItemHelper {
 				return link.getRel().equals(rel);
 			}
 		});
+	}
+
+	public static List<Link> getLinks(final Item item, final String rel) {
+		return item.findLinks(new Predicate<Link>() {
+	
+			@Override
+			public boolean apply(final Link link) {
+				return link.getRel().contains(rel);
+			}
+		});
+	
 	}
 
 	public static String generateId(final Item item) {
@@ -54,5 +66,4 @@ public class ItemHelper {
 		}
 		return value.get().asString();
 	}
-
 }
