@@ -1,14 +1,9 @@
 package no.javazone.activities.ems.model;
 
-import java.net.URI;
-import java.security.MessageDigest;
-
 import net.hamnaberg.json.Item;
-import net.hamnaberg.json.Property;
-import net.hamnaberg.json.Value;
+import net.hamnaberg.json.Link;
 import net.hamnaberg.json.util.Optional;
-
-import org.apache.commons.codec.binary.Hex;
+import no.javazone.activities.ems.ItemHelper;
 
 import com.google.common.base.Function;
 
@@ -23,9 +18,10 @@ public class EmsSession {
 	private final String level;
 	private final String lang;
 	private final String id;
+	private final Optional<Link> speakerLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
-			final String format, final String audience, final String level, final String lang) {
+			final String format, final String audience, final String level, final String lang, final Optional<Link> speakerLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -35,6 +31,7 @@ public class EmsSession {
 		this.audience = audience;
 		this.level = level;
 		this.lang = lang;
+		this.speakerLink = speakerLink;
 	}
 
 	public String getId() {
@@ -73,46 +70,35 @@ public class EmsSession {
 		return lang;
 	}
 
+	public Optional<Link> getSpeakerLink() {
+		return speakerLink;
+	}
+
 	@Override
 	public String toString() {
 		return "Session [title=" + title + "]";
 	}
 
-	public static Function<Item, EmsSession> collectionToSessions(final MessageDigest mda) {
+	public static Function<Item, EmsSession> collectionItemToSession() {
 		return new Function<Item, EmsSession>() {
 			@Override
 			public EmsSession apply(final Item item) {
-				String title = getStringValue(item, "title");
-				String summary = getStringValue(item, "summary");
-				String outline = getStringValue(item, "outline");
-				String body = getStringValue(item, "body");
-				String format = getStringValue(item, "format");
-				String audience = getStringValue(item, "audience");
-				String level = getStringValue(item, "level");
-				String lang = getStringValue(item, "lang");
+				String title = ItemHelper.getStringValue(item, "title");
+				String summary = ItemHelper.getStringValue(item, "summary");
+				String outline = ItemHelper.getStringValue(item, "outline");
+				String body = ItemHelper.getStringValue(item, "body");
+				String format = ItemHelper.getStringValue(item, "format");
+				String audience = ItemHelper.getStringValue(item, "audience");
+				String level = ItemHelper.getStringValue(item, "level");
+				String lang = ItemHelper.getStringValue(item, "lang");
 
-				String id = generateId(mda, item);
+				String id = ItemHelper.generateId(item);
 
-				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang);
+				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
+
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, speakerLink);
 			}
 
-			private String generateId(final MessageDigest mda, final Item item) {
-				URI href = item.getHref();
-				return new String(Hex.encodeHex(mda.digest(href.toString().getBytes())));
-			}
-
-			private String getStringValue(final Item item, final String key) {
-				Optional<Property> property = item.propertyByName(key);
-				if (property.isNone()) {
-					return "";
-				}
-				Optional<Value> value = property.get().getValue();
-				if (value.isNone()) {
-					return "";
-				}
-				return value.get().asString();
-			}
 		};
 	}
-
 }

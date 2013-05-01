@@ -45,3 +45,35 @@
 2013.05.01 16:36:18.845 INFO  no.javazone.server.WebServerMain - Server startet på port 12345
 2013.05.01 16:36:28.093 INFO  n.javazone.activities.ems.EmsService - Starter innlasting av sessions for 2013 fra EMS
 2013.05.01 16:36:29.350 INFO  n.javazone.activities.ems.EmsService - Lastet session for 2013 fra EMS på 1254 ms.
+2013.05.01 17:13:11.163 INFO  no.javazone.server.PropertiesLoader - Laster properties fra filen: /Users/eh/javazone.properties
+2013.05.01 17:13:11.165 INFO  no.javazone.server.PropertiesLoader - --------PROPERTIES-----------
+2013.05.01 17:13:11.167 INFO  no.javazone.server.PropertiesLoader - twitter.user.token.secret=G6uvvHvWo7N2JCCXOKWsaaV1sRJOVhzBSsHUNodttSE
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - server.port=12345
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - twitter.user.token=15148494-9SIMbZE5m5cKt0iZXBB2R8kfHkELei8LxdIGW4xHc
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - twitter.customer.key=AYAeP157WDeOzUSnh14AuA
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - wordpress.rooturl=https://public-api.wordpress.com/rest/v1/sites/46283686
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - twitter.customer.secret=HXl7CLnWFsPz3LM4B9S7wSsQffEP75uion0yFwhXu90
+2013.05.01 17:13:11.168 INFO  no.javazone.server.PropertiesLoader - server.proxy=http://localhost:12345
+2013.05.01 17:13:11.169 INFO  no.javazone.server.PropertiesLoader - -----------------------------
+2013.05.01 17:13:11.238 INFO  org.eclipse.jetty.server.Server - jetty-7.5.4.v20111024
+2013.05.01 17:13:11.339 INFO  o.e.j.server.handler.ContextHandler - started o.e.j.s.ServletContextHandler{/,null}
+2013.05.01 17:13:12.229 INFO  o.e.jetty.server.AbstractConnector - Started SelectChannelConnector@0.0.0.0:12345 STARTING
+2013.05.01 17:13:12.237 INFO  no.javazone.server.WebServerMain - Server startet på port 12345
+2013.05.01 17:13:27.188 INFO  n.javazone.activities.ems.EmsService - Starter innlasting av sessions for 2013 fra EMS
+2013.05.01 17:13:28.599 INFO  n.javazone.activities.ems.EmsService - Lastet session for 2013 fra EMS på 1407 ms.
+2013.05.01 17:15:21.487 INFO  no.javazone.server.PropertiesLoader - Laster properties fra filen: /Users/eh/javazone.properties
+2013.05.01 17:15:21.490 INFO  no.javazone.server.PropertiesLoader - --------PROPERTIES-----------
+2013.05.01 17:15:21.490 INFO  no.javazone.server.PropertiesLoader - twitter.user.token.secret=G6uvvHvWo7N2JCCXOKWsaaV1sRJOVhzBSsHUNodttSE
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - server.port=12345
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - twitter.user.token=15148494-9SIMbZE5m5cKt0iZXBB2R8kfHkELei8LxdIGW4xHc
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - twitter.customer.key=AYAeP157WDeOzUSnh14AuA
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - wordpress.rooturl=https://public-api.wordpress.com/rest/v1/sites/46283686
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - twitter.customer.secret=HXl7CLnWFsPz3LM4B9S7wSsQffEP75uion0yFwhXu90
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - server.proxy=http://localhost:12345
+2013.05.01 17:15:21.491 INFO  no.javazone.server.PropertiesLoader - -----------------------------
+2013.05.01 17:15:21.564 INFO  org.eclipse.jetty.server.Server - jetty-7.5.4.v20111024
+2013.05.01 17:15:21.643 INFO  o.e.j.server.handler.ContextHandler - started o.e.j.s.ServletContextHandler{/,null}
+2013.05.01 17:15:22.513 INFO  o.e.jetty.server.AbstractConnector - Started SelectChannelConnector@0.0.0.0:12345 STARTING
+2013.05.01 17:15:22.521 INFO  no.javazone.server.WebServerMain - Server startet på port 12345
+2013.05.01 17:15:22.657 INFO  n.javazone.activities.ems.EmsService - Starter innlasting av sessions for 2013 fra EMS
+2013.05.01 17:15:24.005 INFO  n.javazone.activities.ems.EmsService - Lastet session for 2013 fra EMS på 1345 ms.

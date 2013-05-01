@@ -2,6 +2,8 @@ package no.javazone.server;
 
 import java.io.IOException;
 
+import no.javazone.activities.ems.EmsService;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -28,9 +30,14 @@ public class WebServerMain {
 		try {
 			server.start();
 			LOG.info("Server startet på port " + port);
+			doStartupTasks();
 			server.join();
 		} catch (Exception e) {
 			LOG.error("Kunne ikke starte server!", e);
 		}
+	}
+
+	private static void doStartupTasks() {
+		EmsService.getInstance().refresh();
 	}
 }

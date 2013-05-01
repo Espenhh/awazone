@@ -5,12 +5,11 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.List;
 
 import no.javazone.activities.ems.model.EmsSession;
+import no.javazone.activities.ems.model.EmsSpeaker;
 import no.javazone.representations.Link;
 import no.javazone.server.PropertiesLoader;
 
 import org.codehaus.jackson.annotate.JsonProperty;
-
-import com.google.common.base.Function;
 
 public class Session {
 	@JsonProperty("title")
@@ -29,11 +28,13 @@ public class Session {
 	private final String summary;
 	@JsonProperty("outline")
 	private final String outline;
+	@JsonProperty("speakers")
+	private final List<Speaker> speakers;
 	@JsonProperty("links")
 	private final List<Link> links;
 
 	public Session(final String title, final String format, final String level, final String lang, final String audience,
-			final String body, final String summary, final String outline, final List<Link> links) {
+			final String body, final String summary, final String outline, final List<Speaker> speakers, final List<Link> links) {
 		this.title = title;
 		this.format = format;
 		this.level = level;
@@ -42,23 +43,19 @@ public class Session {
 		this.body = body;
 		this.summary = summary;
 		this.outline = outline;
+		this.speakers = speakers;
 		this.links = links;
 	}
 
-	public static Function<EmsSession, Session> emsSessionToSession() {
-		return new Function<EmsSession, Session>() {
-			@Override
-			public Session apply(final EmsSession emsSession) {
-				return new Session(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
-						emsSession.getAudience(), emsSession.getBody(), emsSession.getSummary(), emsSession.getOutline(),
-						createLinks(emsSession));
-			}
+	public static Session createSession(final EmsSession emsSession, final List<EmsSpeaker> speakers) {
+		return new Session(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
+				emsSession.getAudience(), emsSession.getBody(), emsSession.getSummary(), emsSession.getOutline(),
+				Speaker.createSpeakers(speakers), createLinks(emsSession));
+	}
 
-			private List<Link> createLinks(final EmsSession emsSession) {
-				Link detailsLink = new Link("self", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId());
-				return newArrayList(detailsLink);
-			}
-		};
+	private static List<Link> createLinks(final EmsSession emsSession) {
+		Link detailsLink = new Link("self", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId());
+		return newArrayList(detailsLink);
 	}
 
 }

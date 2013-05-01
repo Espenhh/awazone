@@ -5,18 +5,20 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import net.hamnaberg.json.Collection;
+import net.hamnaberg.json.Link;
 import net.hamnaberg.json.parser.CollectionParser;
+import net.hamnaberg.json.util.Optional;
 import no.javazone.activities.ems.model.ConferenceYear;
 import no.javazone.activities.ems.model.EmsSession;
+import no.javazone.activities.ems.model.EmsSpeaker;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.joda.time.DateTime;
@@ -39,18 +41,13 @@ public class EmsService {
 	private static EmsService instance;
 
 	private final Client jerseyClient;
-	private MessageDigest mda;
 
 	private ConferenceYear conferenceYear2012 = null;
 
 	private EmsService() {
 		ClientConfig config = new DefaultClientConfig();
 		jerseyClient = Client.create(config);
-		try {
-			mda = MessageDigest.getInstance("SHA-512");
-		} catch (NoSuchAlgorithmException e) {
-			LOG.error("Kunne ikke lage SHA-512", e);
-		}
+
 	}
 
 	public long refresh() {
@@ -62,7 +59,7 @@ public class EmsService {
 			InputStream stream = jerseyClient.resource(SESSION_LINK_2012).get(InputStream.class);
 			Collection collection = new CollectionParser().parse(stream);
 
-			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionToSessions(mda)));
+			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionItemToSession()));
 			conferenceYear2012 = new ConferenceYear(sessions, new DateTime());
 
 			long bruktTid = s.getTime();
@@ -100,5 +97,23 @@ public class EmsService {
 			}
 		}
 		return null;
+	}
+
+	public List<EmsSpeaker> getSpeakersForSession(final EmsSession emsSession) {
+		try {
+			Optional<Link> speakerLinkOptional = emsSession.getSpeakerLink();
+			if (speakerLinkOptional.isSome()) {
+				Link speakerLink = speakerLinkOptional.get();
+
+				InputStream stream = jerseyClient.resource(speakerLink.getHref()).get(InputStream.class);
+				Collection collection = new CollectionParser().parse(stream);
+				return newArrayList(transform(collection.getItems(), EmsSpeaker.collectionItemToSpeaker()));
+			} else {
+				return newArrayList();
+			}
+		} catch (IOException e) {
+			LOG.warn("Kunne ikke hente speakers for session " + emsSession.getTitle(), e);
+			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
