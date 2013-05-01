@@ -1,5 +1,8 @@
 package no.javazone.activities.ems;
 
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.net.URI;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,6 +18,8 @@ import net.hamnaberg.json.util.Predicate;
 import org.apache.commons.codec.binary.Hex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Function;
 
 public class ItemHelper {
 
@@ -32,13 +37,13 @@ public class ItemHelper {
 
 	public static List<Link> getLinks(final Item item, final String rel) {
 		return item.findLinks(new Predicate<Link>() {
-	
+
 			@Override
 			public boolean apply(final Link link) {
 				return link.getRel().contains(rel);
 			}
 		});
-	
+
 	}
 
 	public static String generateId(final Item item) {
@@ -65,5 +70,19 @@ public class ItemHelper {
 			return "";
 		}
 		return value.get().asString();
+	}
+
+	public static List<String> getArrayValue(final Item item, final String key) {
+		Optional<Property> property = item.propertyByName(key);
+		if (property.isNone()) {
+			return newArrayList();
+		}
+		List<Value> value = property.get().getArray();
+		return newArrayList(transform(value, new Function<Value, String>() {
+			@Override
+			public String apply(final Value value) {
+				return value.asString();
+			}
+		}));
 	}
 }

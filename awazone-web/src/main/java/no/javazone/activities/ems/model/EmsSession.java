@@ -24,12 +24,13 @@ public class EmsSession {
 	private final String level;
 	private final String lang;
 	private final String room;
+	private final List<String> keywords;
 	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
 			final String format, final String audience, final String level, final String lang, final String room,
-			final List<String> speakerNames, final Optional<Link> speakerLink) {
+			final List<String> keywords, final List<String> speakerNames, final Optional<Link> speakerLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -40,6 +41,7 @@ public class EmsSession {
 		this.level = level;
 		this.lang = lang;
 		this.room = room;
+		this.keywords = keywords;
 		this.speakerNames = speakerNames;
 		this.speakerLink = speakerLink;
 	}
@@ -84,6 +86,10 @@ public class EmsSession {
 		return room;
 	}
 
+	public List<String> getKeywords() {
+		return keywords;
+	}
+
 	public List<String> getSpeakerNames() {
 		return speakerNames;
 	}
@@ -112,13 +118,16 @@ public class EmsSession {
 				String level = ItemHelper.getStringValue(item, "level");
 				String lang = ItemHelper.getStringValue(item, "lang");
 
+				List<String> keywords = ItemHelper.getArrayValue(item, "keywords");
+
 				List<String> speakerNames = extractSpeakerNames(item);
 
 				String room = extractRoom(item);
 
 				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
 
-				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, speakerNames, speakerLink);
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, keywords, speakerNames,
+						speakerLink);
 			}
 
 			private String extractRoom(final Item item) {
