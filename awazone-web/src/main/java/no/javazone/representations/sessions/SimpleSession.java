@@ -24,6 +24,10 @@ public class SimpleSession {
 	private final String lang;
 	@JsonProperty("room")
 	private final String room;
+	@JsonProperty("start")
+	private final String start;
+	@JsonProperty("stop")
+	private final String stop;
 	@JsonProperty("keywords")
 	private final List<String> keywords;
 	@JsonProperty("speakers")
@@ -32,12 +36,14 @@ public class SimpleSession {
 	private final List<Link> links;
 
 	public SimpleSession(final String title, final String format, final String level, final String lang, final String room,
-			final List<String> keywords, final List<String> speakers, final List<Link> links) {
+			final String start, final String stop, final List<String> keywords, final List<String> speakers, final List<Link> links) {
 		this.title = title;
 		this.format = format;
 		this.level = level;
 		this.lang = lang;
 		this.room = room;
+		this.start = start;
+		this.stop = stop;
 		this.keywords = keywords;
 		this.speakers = speakers;
 		this.links = links;
@@ -48,7 +54,8 @@ public class SimpleSession {
 			@Override
 			public SimpleSession apply(final EmsSession emsSession) {
 				return new SimpleSession(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
-						emsSession.getRoom(), emsSession.getKeywords(), emsSession.getSpeakerNames(), createLinks(emsSession));
+						emsSession.getRoom(), emsSession.getStart(), emsSession.getStop(), emsSession.getKeywords(),
+						emsSession.getSpeakerNames(), createLinks(emsSession));
 			}
 
 			private List<Link> createLinks(final EmsSession emsSession) {

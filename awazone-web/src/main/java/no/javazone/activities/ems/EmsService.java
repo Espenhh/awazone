@@ -34,9 +34,10 @@ public class EmsService {
 	private static final Logger LOG = LoggerFactory.getLogger(EmsService.class);
 
 	// TODO: start fra rotressurs for å finne linken... Ikke hardkod ;)
-	private static final String SESSION_LINK_2012 = "http://www.javazone.no/ems/server/events/4c18f45a-054a-4699-a2bc-6a59a9dd8382/sessions";
+	private static final String SESSION_LINK_2012 = "http://test.java.no/ems-redux/server/events/4c18f45a-054a-4699-a2bc-6a59a9dd8382/sessions";
 
 	// Test: http://test.java.no/ems-redux/server
+	// Prod: http://www.javazone.no/ems/server
 
 	private static EmsService instance;
 

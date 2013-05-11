@@ -24,13 +24,15 @@ public class EmsSession {
 	private final String level;
 	private final String lang;
 	private final String room;
+	private final String start;
+	private final String stop;
 	private final List<String> keywords;
 	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
-			final String format, final String audience, final String level, final String lang, final String room,
-			final List<String> keywords, final List<String> speakerNames, final Optional<Link> speakerLink) {
+			final String format, final String audience, final String level, final String lang, final String room, final String start,
+			final String stop, final List<String> keywords, final List<String> speakerNames, final Optional<Link> speakerLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -41,6 +43,8 @@ public class EmsSession {
 		this.level = level;
 		this.lang = lang;
 		this.room = room;
+		this.start = start;
+		this.stop = stop;
 		this.keywords = keywords;
 		this.speakerNames = speakerNames;
 		this.speakerLink = speakerLink;
@@ -86,6 +90,14 @@ public class EmsSession {
 		return room;
 	}
 
+	public String getStart() {
+		return start;
+	}
+
+	public String getStop() {
+		return stop;
+	}
+
 	public List<String> getKeywords() {
 		return keywords;
 	}
@@ -119,15 +131,37 @@ public class EmsSession {
 				String lang = ItemHelper.getStringValue(item, "lang");
 
 				List<String> keywords = ItemHelper.getArrayValue(item, "keywords");
-
 				List<String> speakerNames = extractSpeakerNames(item);
-
 				String room = extractRoom(item);
+
+				// TODO: refaktorere, detta var støgt :P
+				String start = null;
+				String stop = null;
+				String slotString = extractSlotString(item);
+				if (slotString != null) {
+					String[] strings = slotString.split("\\+");
+					if (strings.length == 2) {
+						start = strings[0];
+						stop = strings[1];
+					}
+				}
 
 				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
 
-				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, keywords, speakerNames,
-						speakerLink);
+				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, start, stop, keywords,
+						speakerNames, speakerLink);
+			}
+
+			private String extractSlotString(final Item item) {
+				Optional<Link> slotLink = ItemHelper.getLink(item, "slot item");
+				if (slotLink.isNone()) {
+					return null;
+				}
+				Optional<String> slotPrompt = slotLink.get().getPrompt();
+				if (slotPrompt.isNone()) {
+					return null;
+				}
+				return slotPrompt.get();
 			}
 
 			private String extractRoom(final Item item) {
