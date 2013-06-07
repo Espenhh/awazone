@@ -29,6 +29,7 @@ import twitter4j.Twitter;
 import twitter4j.TwitterException;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 
 public class TweetService {
 
@@ -74,8 +75,9 @@ public class TweetService {
 	public TwitterList hentEgneTweets() {
 		try {
 			ResponseList<Status> userTimeline = twitter.getUserTimeline();
-			ArrayList<Tweet> tweets = statusListToTweets(userTimeline);
-			return new TwitterList(new DateTime(), tweets);
+			List<Tweet> fetchedTweets = statusListToTweets(userTimeline);
+			List<Tweet> filteredTweets = newArrayList(Collections2.filter(fetchedTweets, Tweet.notRetweetsOrAttTweets()));
+			return new TwitterList(new DateTime(), filteredTweets);
 		} catch (TwitterException e) {
 			throw loggFeilOgKastFeilmelding(e);
 		}
@@ -120,7 +122,7 @@ public class TweetService {
 		ArrayList<Tweet> tweets = newArrayList(transform(list, new Function<Status, Tweet>() {
 			@Override
 			public Tweet apply(final Status status) {
-				return new Tweet(status.getUser().getScreenName(), status.getText());
+				return new Tweet(status.getCreatedAt(), status.getUser().getScreenName(), status.getText());
 			}
 		}));
 		return tweets;
