@@ -88,7 +88,15 @@ public class TweetService {
 			return egneTweetsCache;
 		} else {
 			LOG.info("Egne tweets fantes ikke i cache, eller var over " + CACHE_TID_MINUTTER + " minutt gammel. Henter fra twitter...");
-			egneTweetsCache = hentEgneTweets();
+			try {
+				egneTweetsCache = hentEgneTweets();
+			} catch (WebApplicationException e) {
+				// Hvis vi får feilmelding, så logges det, men vi sender ut
+				// cache versjon hvis vi har :)
+				if (egneTweetsCache == null) {
+					throw e;
+				}
+			}
 			return egneTweetsCache;
 		}
 	}
