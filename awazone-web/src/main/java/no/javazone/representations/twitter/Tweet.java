@@ -18,11 +18,14 @@ public class Tweet {
 	private final String user;
 	@JsonProperty
 	private final String tweet;
+	@JsonProperty
+	private final String link;
 
-	public Tweet(final Date date, final String user, final String tweet) {
+	public Tweet(final Date date, final String user, final String tweet, final String link) {
 		this.date = date;
 		this.user = user;
 		this.tweet = tweet;
+		this.link = link;
 
 		relativeDate = TimeUtil.generateRelativeDate(date.getTime());
 	}

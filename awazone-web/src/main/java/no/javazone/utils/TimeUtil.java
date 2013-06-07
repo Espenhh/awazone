@@ -9,23 +9,32 @@ public class TimeUtil {
 		DateTime now = DateTime.now();
 
 		Period period = new Period(then, now);
-//		System.out.println(period.toString());
 
 		if (period.getYears() > 0) {
-			return period.getYears() + " years ago";
+			return pluralize(period.getYears(), "year");
 		} else if (period.getMonths() > 0) {
-			return period.getMonths() + " months ago";
+			return pluralize(period.getMonths(), "month");
 		} else if (period.getWeeks() > 0) {
-			return period.getWeeks() + " weeks ago";
+			return pluralize(period.getWeeks(), "week");
 		} else if (period.getDays() > 0) {
-			return period.getDays() + " days ago";
+			return pluralize(period.getDays(), "day");
 		} else if (period.getHours() > 0) {
-			return period.getHours() + " hours ago";
+			return pluralize(period.getHours(), "hour");
 		} else if (period.getMinutes() > 0) {
-			return period.getMinutes() + " minutes ago";
+			return pluralize(period.getMinutes(), "minute");
 		} else if (period.getSeconds() > 0) {
-			return period.getSeconds() + " seconds ago";
+			return pluralize(period.getSeconds(), "second");
+		} else {
+			return "now";
 		}
-		return "now";
+	}
+
+	private static String pluralize(final int duration, final String base) {
+		String toReturn = duration + " " + base;
+		if (duration > 1) {
+			toReturn += "s";
+		}
+		toReturn += " ago";
+		return toReturn;
 	}
 }

@@ -122,7 +122,11 @@ public class TweetService {
 		ArrayList<Tweet> tweets = newArrayList(transform(list, new Function<Status, Tweet>() {
 			@Override
 			public Tweet apply(final Status status) {
-				return new Tweet(status.getCreatedAt(), status.getUser().getScreenName(), status.getText());
+				return new Tweet(status.getCreatedAt(), status.getUser().getScreenName(), status.getText(), generateLink(status));
+			}
+
+			private String generateLink(final Status status) {
+				return "https://twitter.com/javazone/status/" + status.getId();
 			}
 		}));
 		return tweets;
