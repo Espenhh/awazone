@@ -37,7 +37,7 @@ public class TweetResource {
 
 		stopWatch.stop();
 
-		LOG.info("Henting av egne tweets tok " + stopWatch.getTime() + "ms");
+		LOG.debug("Henting av egne tweets tok " + stopWatch.getTime() + "ms");
 		return Response.ok(tweets).build();
 	}
 
