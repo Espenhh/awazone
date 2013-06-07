@@ -35,7 +35,7 @@ public class TweetService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TweetService.class);
 
-	private static final int CACHE_TID_MINUTTER = 1;
+	private static final int CACHE_TID_MINUTTER = 10;
 	private final Map<String, TwitterList> cache = new ConcurrentHashMap<String, TwitterList>();
 	private TwitterList egneTweetsCache;
 
