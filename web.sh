@@ -1,10 +1,12 @@
 #/bin/bash
 
-if [ ! -f /awezone.properties ]
+PROPERTIES="$(pwd)/awazone.properties"
+
+if [ ! -f $PROPERTIES ]
 then
-    echo "Filen /awezone.properties (på rot av disken din) finnes ikke. Legg den der før du kan starte :)"
-	exit 1
+    echo "Filen $PROPERTIES finnes ikke. Fix it. :)"
+    exit 1
 fi
 
 cd awazone-web
-mvn exec:java
+mvn exec:java -DpropertyFile=$PROPERTIES

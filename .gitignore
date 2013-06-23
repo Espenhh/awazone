@@ -5,3 +5,4 @@ target
 awazone-web/logs
 awazone-web/logDirectory_IS_UNDEFINED/*
 node_modules/*
+awazone.properties
