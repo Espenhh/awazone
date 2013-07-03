@@ -19,6 +19,7 @@ import net.hamnaberg.json.util.Optional;
 import no.javazone.activities.ems.model.ConferenceYear;
 import no.javazone.activities.ems.model.EmsSession;
 import no.javazone.activities.ems.model.EmsSpeaker;
+import no.javazone.server.PropertiesLoader;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.joda.time.DateTime;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
@@ -108,7 +110,9 @@ public class EmsService {
 			if (speakerLinkOptional.isSome()) {
 				Link speakerLink = speakerLinkOptional.get();
 
-				InputStream stream = jerseyClient.resource(speakerLink.getHref()).get(InputStream.class);
+				WebResource resource = jerseyClient.resource(speakerLink.getHref());
+				addBasicauthHeader(resource);
+				InputStream stream = resource.get(InputStream.class);
 				Collection collection = new CollectionParser().parse(stream);
 				return newArrayList(transform(collection.getItems(), EmsSpeaker.collectionItemToSpeaker()));
 			} else {
@@ -118,5 +122,9 @@ public class EmsService {
 			LOG.warn("Kunne ikke hente speakers for session " + emsSession.getTitle(), e);
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	private void addBasicauthHeader(final WebResource resource) {
+		resource.header("Authorization", "Basic " + PropertiesLoader.getProperty("ems.basicauth"));
 	}
 }

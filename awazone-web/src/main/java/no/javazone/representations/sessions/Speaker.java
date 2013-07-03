@@ -17,10 +17,13 @@ public class Speaker {
 	private final String name;
 	@JsonProperty("bio")
 	private final String bio;
+	@JsonProperty("gravatarUrl")
+	private final String gravatarUrl;
 
-	public Speaker(final String name, final String bio) {
+	public Speaker(final String name, final String bio, final String gravatarUrl) {
 		this.name = name;
 		this.bio = bio;
+		this.gravatarUrl = gravatarUrl;
 	}
 
 	public static List<Speaker> createSpeakers(final List<EmsSpeaker> speakers) {
@@ -31,7 +34,7 @@ public class Speaker {
 		return new Function<EmsSpeaker, Speaker>() {
 			@Override
 			public Speaker apply(final EmsSpeaker item) {
-				return new Speaker(item.getName(), item.getBio());
+				return new Speaker(item.getName(), item.getBio(), item.getGravatarUrl());
 			}
 		};
 	}
