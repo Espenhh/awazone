@@ -34,7 +34,9 @@ public class EmsService {
 	private static final Logger LOG = LoggerFactory.getLogger(EmsService.class);
 
 	// TODO: start fra rotressurs for å finne linken... Ikke hardkod ;)
-	private static final String SESSION_LINK_2012 = "http://test.java.no/ems-redux/server/events/4c18f45a-054a-4699-a2bc-6a59a9dd8382/sessions";
+	// private static final String SESSION_LINK_2012 =
+	// "http://test.java.no/ems-redux/server/events/4c18f45a-054a-4699-a2bc-6a59a9dd8382/sessions";
+	private static final String SESSION_LINK_2013 = "http://www.javazone.no/ems/server/events/cee37cc1-5399-47ef-9418-21f9b6444bfa/sessions";
 
 	// Test: http://test.java.no/ems-redux/server
 	// Prod: http://www.javazone.no/ems/server
@@ -57,7 +59,7 @@ public class EmsService {
 			StopWatch s = new StopWatch();
 			s.start();
 
-			InputStream stream = jerseyClient.resource(SESSION_LINK_2012).get(InputStream.class);
+			InputStream stream = jerseyClient.resource(SESSION_LINK_2013).get(InputStream.class);
 			Collection collection = new CollectionParser().parse(stream);
 
 			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionItemToSession()));
