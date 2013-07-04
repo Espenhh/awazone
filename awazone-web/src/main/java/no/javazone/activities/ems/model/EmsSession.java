@@ -29,6 +29,7 @@ public class EmsSession {
 	private final List<String> keywords;
 	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
+	private List<EmsSpeaker> speakerDetails;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
 			final String format, final String audience, final String level, final String lang, final String room, final String start,
@@ -108,6 +109,10 @@ public class EmsSession {
 
 	public Optional<Link> getSpeakerLink() {
 		return speakerLink;
+	}
+
+	public List<EmsSpeaker> getSpeakerDetails() {
+		return speakerDetails;
 	}
 
 	@Override
@@ -192,5 +197,9 @@ public class EmsSession {
 			}
 
 		};
+	}
+
+	public void addDetailedSpeakerInfo(final List<EmsSpeaker> speakerDetails) {
+		this.speakerDetails = speakerDetails;
 	}
 }

@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response.Status;
 
 import no.javazone.activities.ems.model.ConferenceYear;
 import no.javazone.activities.ems.model.EmsSession;
-import no.javazone.activities.ems.model.EmsSpeaker;
 import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
 
@@ -41,9 +40,7 @@ public class SessionsActivity {
 			throw new WebApplicationException(Status.NOT_FOUND);
 		}
 
-		List<EmsSpeaker> speakers = emsService.getSpeakersForSession(emsSession);
-
-		return Session.createSession(emsSession, speakers);
+		return Session.createSession(emsSession);
 	}
 
 }

@@ -31,12 +31,12 @@ public class SimpleSession {
 	@JsonProperty("keywords")
 	private final List<String> keywords;
 	@JsonProperty("speakers")
-	private final List<String> speakers;
+	private final List<SimpleSpeaker> speakers;
 	@JsonProperty("links")
 	private final List<Link> links;
 
 	public SimpleSession(final String title, final String format, final String level, final String lang, final String room,
-			final String start, final String stop, final List<String> keywords, final List<String> speakers, final List<Link> links) {
+			final String start, final String stop, final List<String> keywords, final List<SimpleSpeaker> speakers, final List<Link> links) {
 		this.title = title;
 		this.format = format;
 		this.level = level;
@@ -55,7 +55,7 @@ public class SimpleSession {
 			public SimpleSession apply(final EmsSession emsSession) {
 				return new SimpleSession(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
 						emsSession.getRoom(), emsSession.getStart(), emsSession.getStop(), emsSession.getKeywords(),
-						emsSession.getSpeakerNames(), createLinks(emsSession));
+						SimpleSpeaker.createSpeakers(emsSession.getSpeakerDetails()), createLinks(emsSession));
 			}
 
 			private List<Link> createLinks(final EmsSession emsSession) {

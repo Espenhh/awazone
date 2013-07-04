@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
@@ -47,7 +46,7 @@ public class EmsService {
 
 	private final Client jerseyClient;
 
-	private ConferenceYear conferenceYear2012 = null;
+	private ConferenceYear conferenceYear = null;
 
 	private EmsService() {
 		ClientConfig config = new DefaultClientConfig();
@@ -65,7 +64,23 @@ public class EmsService {
 			Collection collection = new CollectionParser().parse(stream);
 
 			ArrayList<EmsSession> sessions = newArrayList(transform(collection.getItems(), EmsSession.collectionItemToSession()));
-			conferenceYear2012 = new ConferenceYear(sessions, new DateTime());
+
+			LOG.info("Henter speakerinfo for sessions");
+			int i = 0;
+			// Litt hackish :P
+			for (EmsSession emsSession : sessions) {
+				try {
+					LOG.info(String.format("Henter speakerinfo for session %s av %s", ++i, sessions.size()));
+					List<EmsSpeaker> speakersForSession = getSpeakersForSession(emsSession);
+					emsSession.addDetailedSpeakerInfo(speakersForSession);
+				} catch (Exception e) {
+					emsSession.addDetailedSpeakerInfo(new ArrayList<EmsSpeaker>());
+					LOG.warn("Feilet under uthenting av speakerinfo for en session. Går videre...", e);
+				}
+			}
+			LOG.info("Ferdig med å hente speakerinfo for sessions");
+
+			conferenceYear = new ConferenceYear(sessions, new DateTime());
 
 			long bruktTid = s.getTime();
 			LOG.info("Lastet session for 2013 fra EMS på {} ms.", bruktTid);
@@ -82,10 +97,10 @@ public class EmsService {
 	}
 
 	public ConferenceYear getConferenceYear() {
-		if (conferenceYear2012 == null) {
+		if (conferenceYear == null) {
 			throw new WebApplicationException(Status.SERVICE_UNAVAILABLE);
 		}
-		return conferenceYear2012;
+		return conferenceYear;
 	}
 
 	public static EmsService getInstance() {
@@ -96,7 +111,7 @@ public class EmsService {
 	}
 
 	public EmsSession getSession(final String id) {
-		for (EmsSession session : conferenceYear2012.getSessions()) {
+		for (EmsSession session : conferenceYear.getSessions()) {
 			if (session.getId().equals(id)) {
 				return session;
 			}
@@ -110,9 +125,10 @@ public class EmsService {
 			if (speakerLinkOptional.isSome()) {
 				Link speakerLink = speakerLinkOptional.get();
 
-				WebResource resource = jerseyClient.resource(speakerLink.getHref());
-				addBasicauthHeader(resource);
-				InputStream stream = resource.get(InputStream.class);
+				InputStream stream = jerseyClient
+						.resource(speakerLink.getHref())
+						.header("Authorization", "Basic " + PropertiesLoader.getProperty("ems.basicauth"))
+						.get(InputStream.class);
 				Collection collection = new CollectionParser().parse(stream);
 				return newArrayList(transform(collection.getItems(), EmsSpeaker.collectionItemToSpeaker()));
 			} else {
@@ -122,9 +138,5 @@ public class EmsService {
 			LOG.warn("Kunne ikke hente speakers for session " + emsSession.getTitle(), e);
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
-	}
-
-	private void addBasicauthHeader(final WebResource resource) {
-		resource.header("Authorization", "Basic " + PropertiesLoader.getProperty("ems.basicauth"));
 	}
 }

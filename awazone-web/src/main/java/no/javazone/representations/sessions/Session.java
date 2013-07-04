@@ -5,7 +5,6 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.List;
 
 import no.javazone.activities.ems.model.EmsSession;
-import no.javazone.activities.ems.model.EmsSpeaker;
 import no.javazone.representations.Link;
 import no.javazone.server.PropertiesLoader;
 
@@ -60,11 +59,11 @@ public class Session {
 		this.links = links;
 	}
 
-	public static Session createSession(final EmsSession emsSession, final List<EmsSpeaker> speakers) {
+	public static Session createSession(final EmsSession emsSession) {
 		return new Session(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
 				emsSession.getAudience(), emsSession.getRoom(), emsSession.getStart(), emsSession.getStop(), emsSession.getBody(),
-				emsSession.getSummary(), emsSession.getOutline(), emsSession.getKeywords(), Speaker.createSpeakers(speakers),
-				createLinks(emsSession));
+				emsSession.getSummary(), emsSession.getOutline(), emsSession.getKeywords(), Speaker.createSpeakers(emsSession
+						.getSpeakerDetails()), createLinks(emsSession));
 	}
 
 	private static List<Link> createLinks(final EmsSession emsSession) {
