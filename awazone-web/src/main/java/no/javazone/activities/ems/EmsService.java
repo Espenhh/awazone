@@ -116,7 +116,7 @@ public class EmsService {
 
 	public EmsSession getSession(final String id) {
 		for (EmsSession session : conferenceYear.getSessions()) {
-			if (session.getId().equals(id)) {
+			if (session.getId().startsWith(id)) {
 				return session;
 			}
 		}
