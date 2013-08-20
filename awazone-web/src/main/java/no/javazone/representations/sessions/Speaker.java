@@ -34,7 +34,7 @@ public class Speaker {
 		return new Function<EmsSpeaker, Speaker>() {
 			@Override
 			public Speaker apply(final EmsSpeaker item) {
-				return new Speaker(item.getName(), item.getBio(), item.getGravatarUrl());
+				return new Speaker(item.getName(), item.getBio(), item.getProfilePictureUrl());
 			}
 		};
 	}

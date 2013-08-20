@@ -42,5 +42,4 @@ public class SessionsActivity {
 
 		return Session.createSession(emsSession);
 	}
-
 }

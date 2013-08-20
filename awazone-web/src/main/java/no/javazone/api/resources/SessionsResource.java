@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import no.javazone.activities.ems.EmsService;
 import no.javazone.activities.ems.SessionsActivity;
+import no.javazone.activities.ems.SpeakerService;
 import no.javazone.api.filters.NoCacheResponseFilter;
 import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
@@ -26,6 +27,7 @@ import com.sun.jersey.spi.container.ResourceFilters;
 public class SessionsResource {
 
 	private final EmsService emsService = EmsService.getInstance();
+	private final SpeakerService speakerService = SpeakerService.getInstance();
 	private final SessionsActivity sessionsActivity = SessionsActivity.getInstance();
 
 	@GET
@@ -47,8 +49,9 @@ public class SessionsResource {
 	@Path("/refresh")
 	@Produces(TEXT_PLAIN)
 	public String refresh() {
-		long bruktTid = emsService.refresh();
-		return String.format("%s: Sessions ble oppdatert fra EMS. Tok %s millisekunder\n", new DateTime().toString(), bruktTid);
+		long bruktTidEms = emsService.refresh();
+		long bruktTidSpeakers = speakerService.softRefresh();
+		return String.format("%s: Sessions ble oppdatert fra EMS. Sessions+speakers tok %sms. Bilder tok %sms.\n",
+				new DateTime().toString(), bruktTidEms, bruktTidSpeakers);
 	}
-
 }

@@ -50,12 +50,13 @@ public class EmsService {
 
 	private final Client jerseyClient;
 
+	private final SpeakerService speakerService = SpeakerService.getInstance();
+
 	private ConferenceYear conferenceYear = null;
 
 	private EmsService() {
 		ClientConfig config = new DefaultClientConfig();
 		jerseyClient = Client.create(config);
-
 	}
 
 	public long refresh() {
@@ -134,7 +135,11 @@ public class EmsService {
 						.header("Authorization", "Basic " + PropertiesLoader.getProperty("ems.basicauth"))
 						.get(InputStream.class);
 				Collection collection = new CollectionParser().parse(stream);
-				return newArrayList(transform(collection.getItems(), EmsSpeaker.collectionItemToSpeaker()));
+				List<EmsSpeaker> speakers = newArrayList(transform(collection.getItems(), EmsSpeaker.collectionItemToSpeaker()));
+
+				speakerService.addToSpeakersCache(speakers);
+
+				return speakers;
 			} else {
 				return newArrayList();
 			}
@@ -143,4 +148,5 @@ public class EmsService {
 			throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 }
