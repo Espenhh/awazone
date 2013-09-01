@@ -3,6 +3,7 @@ package no.javazone.server;
 import java.io.IOException;
 
 import no.javazone.activities.ems.EmsService;
+import no.javazone.activities.ems.SpeakerService;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -39,5 +40,6 @@ public class WebServerMain {
 
 	private static void doStartupTasks() {
 		EmsService.getInstance().refresh();
+		SpeakerService.getInstance().forceRefresh();
 	}
 }

@@ -30,7 +30,7 @@ public class SimpleSpeaker {
 		return new Function<EmsSpeaker, SimpleSpeaker>() {
 			@Override
 			public SimpleSpeaker apply(final EmsSpeaker item) {
-				return new SimpleSpeaker(item.getName(), item.getGravatarUrl());
+				return new SimpleSpeaker(item.getName(), item.getProfilePictureUrl());
 			}
 		};
 	}
