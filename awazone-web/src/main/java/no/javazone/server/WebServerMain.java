@@ -39,7 +39,12 @@ public class WebServerMain {
 	}
 
 	private static void doStartupTasks() {
-		EmsService.getInstance().refresh();
-		SpeakerService.getInstance().forceRefresh();
+		String property = System.getProperty("loadSessionsOnStartup", "true");
+		if (property.equals("true")) {
+			EmsService.getInstance().refresh();
+			SpeakerService.getInstance().forceRefresh();
+		} else {
+			LOG.warn("Laster IKKE sessions pga propertyen loadSessionsOnStartup != true");
+		}
 	}
 }
