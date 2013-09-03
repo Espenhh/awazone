@@ -3,6 +3,7 @@ package no.javazone.api.resources;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -24,6 +25,14 @@ public class FeedbackResource {
 
 	private final FeedbackService feedbackService = FeedbackService.getInstance();
 
+	@GET
+	@Path("/")
+	@Produces(APPLICATION_JSON)
+	public Response getAllFeedbacks() {
+		Map<String, List<Feedback>> feedbacks = feedbackService.getAllFeedbacks();
+		return Response.ok(feedbacks).build();
+	}
+	
 	@GET
 	@Path("/{talkId}")
 	@Produces(APPLICATION_JSON)

@@ -1,7 +1,9 @@
 package no.javazone.activities.feedback;
 
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -16,11 +18,14 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.GroupCommand;
 import com.mongodb.MongoClient;
 
 public class FeedbackService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FeedbackService.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(FeedbackService.class);
 
 	public static FeedbackService instance;
 	private DBCollection collection;
@@ -37,21 +42,31 @@ public class FeedbackService {
 	}
 
 	public List<Feedback> getFeedbacksForTalk(final String talkId) {
-		BasicDBObject query = new BasicDBObject("talkId", talkId);
-
-		DBCursor cursor = collection.find(query);
+		DBCursor cursor = collection.find(new BasicDBObject("talkId", talkId));
 
 		try {
-			System.out.println("Fant " + cursor.size() + " feedbacks som matcher talkid " + talkId);
+			System.out.println("Fant " + cursor.size()
+					+ " feedbacks som matcher talkid " + talkId);
 			return Feedback.convertFromMongo(cursor.toArray());
 		} finally {
 			cursor.close();
 		}
 	}
 
+	public Map<String, List<Feedback>> getAllFeedbacks() {
+		List<String> talkIds = collection.distinct("talkId");
+		Map<String, List<Feedback>> res = new HashMap<String, List<Feedback>>();
+		for (String talkId : talkIds) {
+			res.put(talkId, getFeedbacksForTalk(talkId));
+		}
+		return res;
+	}
+
 	public void addFeedbackForTalk(final String talkId, final Feedback feedback) {
 		if (!feedback.validate()) {
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("Ikke gyldig feedback!").build());
+			throw new WebApplicationException(Response
+					.status(Status.BAD_REQUEST).entity("Ikke gyldig feedback!")
+					.build());
 		}
 
 		collection.insert(feedback.toMongoObject(talkId));
