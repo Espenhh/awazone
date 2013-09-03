@@ -27,7 +27,14 @@ public class Feedback {
 	}
 
 	public boolean validate() {
-		return rating > 1 && rating < 4;
+		if (rating != null && (rating < 1 || rating > 3)) {
+			return false;
+		}
+		if (comment != null && comment.length() > 10000) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public DBObject toMongoObject(final String talkId) {
@@ -38,9 +45,16 @@ public class Feedback {
 		return newArrayList(transform(feedbacksFromDb, new Function<DBObject, Feedback>() {
 			@Override
 			public Feedback apply(final DBObject dbObject) {
+				// HALLELUJA, dette kan da ikke være nødvendig? Må da finnes en
+				// bedre måte å hente ut på! FIX NOW =)
 				Integer rating;
 				try {
-					rating = Integer.parseInt(dbObject.get("rating").toString());
+					Object ratingObj = dbObject.get("rating");
+					if (ratingObj == null) {
+						rating = null;
+					} else {
+						rating = Integer.parseInt(ratingObj.toString());
+					}
 				} catch (NumberFormatException e) {
 					rating = null;
 				}
