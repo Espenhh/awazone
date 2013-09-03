@@ -41,6 +41,14 @@ public class FeedbackResource {
 		return Response.ok(feedbacks).build();
 	}
 
+	@GET
+	@Path("/{talkId}/summary")
+	@Produces(APPLICATION_JSON)
+	public Response getSummaryFor(@PathParam("talkId") final String talkId) {
+		String s = feedbackService.getSummaryForTalk(talkId);
+		return Response.ok(s).build();
+	}
+	
 	@POST
 	@Path("/{talkId}")
 	@Produces(APPLICATION_JSON)

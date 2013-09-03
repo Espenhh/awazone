@@ -14,7 +14,9 @@ import no.javazone.representations.feedback.Feedback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
+import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -51,6 +53,25 @@ public class FeedbackService {
 		} finally {
 			cursor.close();
 		}
+	}
+	
+	public String getSummaryForTalk(final String talkId) {
+		// db.feedback.aggregate( {"$match": {"talkId": "123"}}, 
+		// 						  { "$group": { _id: "$talkId", number: { $sum:1}, average: { $avg: "$rating"}}})
+		
+		DBObject match = new BasicDBObject("$match", new BasicDBObject("talkId", talkId));
+
+		DBObject groupFields = new BasicDBObject( "_id", "$talkId");
+		groupFields.put("number_of_feedbacks", new BasicDBObject( "$sum", 1));
+		groupFields.put("average_rating", new BasicDBObject( "$avg", "$rating"));
+		DBObject group = new BasicDBObject("$group", groupFields);
+
+		AggregationOutput output = collection.aggregate(match, group);
+
+		Iterable<DBObject> results = output.results();
+		System.out.println(results);
+		
+		return results.toString();
 	}
 
 	public Map<String, List<Feedback>> getAllFeedbacks() {
