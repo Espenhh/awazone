@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response.Status;
 
 import no.javazone.activities.ems.model.ConferenceYear;
 import no.javazone.activities.ems.model.EmsSession;
+import no.javazone.representations.sessions.AdminSimpleSession;
 import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
 
@@ -41,5 +42,10 @@ public class SessionsActivity {
 		}
 
 		return Session.createSession(emsSession);
+	}
+
+	public List<AdminSimpleSession> getSimpleSessionsAdmin() {
+		ConferenceYear conferenceYear = emsService.getConferenceYear();
+		return newArrayList(transform(conferenceYear.getSessions(), AdminSimpleSession.emsSessionToAdminSimpleSession()));
 	}
 }
