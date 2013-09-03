@@ -1,6 +1,7 @@
 package no.javazone.activities.feedback;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import no.javazone.representations.feedback.Feedback;
+import no.javazone.representations.feedback.FeedbackSummary;
 import no.javazone.server.PropertiesLoader;
 
 import org.slf4j.Logger;
@@ -102,4 +104,32 @@ public class FeedbackService {
 		return instance;
 	}
 
+	public FeedbackSummary getFeedbackSummaryForTalk(final String talkId) {
+		DBCursor cursor = collection.find(new BasicDBObject("talkId", talkId));
+
+		// TODO: gjøre noe av dette med mongo direkte? :)
+		int antallRating = 0;
+		int totalRating = 0;
+		List<String> comments = new ArrayList<String>();
+		try {
+			while (cursor.hasNext()) {
+				DBObject o = cursor.next();
+				if (o.containsField("rating") && o.get("rating") != null) {
+					int rating = Integer.parseInt(o.get("rating").toString());
+					antallRating++;
+					totalRating += rating;
+				}
+				if (o.containsField("comment") && o.get("comment") != null) {
+					comments.add(o.get("comment").toString());
+				}
+			}
+			double gjennomsnitt = antallRating > 0 ? (double) totalRating / (double) antallRating : 0;
+
+			System.out.println(String.format("antallRating=%S, totalRating=%s, gjennomsnitt=%s", antallRating, totalRating, gjennomsnitt));
+
+			return new FeedbackSummary(antallRating, gjennomsnitt, comments);
+		} finally {
+			cursor.close();
+		}
+	}
 }
