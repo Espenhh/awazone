@@ -60,7 +60,8 @@ public class SimpleSession {
 
 			private List<Link> createLinks(final EmsSession emsSession) {
 				Link detailsLink = new Link("details", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId());
-				return newArrayList(detailsLink);
+				Link feedbackLink = new Link("feedback", PropertiesLoader.getProperty("server.proxy") + "/feedback/" + emsSession.getId());
+				return newArrayList(detailsLink, feedbackLink);
 			}
 		};
 	}
