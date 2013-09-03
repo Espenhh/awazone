@@ -10,6 +10,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import no.javazone.representations.feedback.AdminFeedback;
 import no.javazone.representations.feedback.Feedback;
 import no.javazone.representations.feedback.FeedbackSummary;
 import no.javazone.server.PropertiesLoader;
@@ -111,6 +112,7 @@ public class FeedbackService {
 		int antallRating = 0;
 		int totalRating = 0;
 		List<String> comments = new ArrayList<String>();
+		List<AdminFeedback> details = new ArrayList<AdminFeedback>();
 		try {
 			while (cursor.hasNext()) {
 				DBObject o = cursor.next();
@@ -122,12 +124,12 @@ public class FeedbackService {
 				if (o.containsField("comment") && o.get("comment") != null) {
 					comments.add(o.get("comment").toString());
 				}
+
+				details.add(AdminFeedback.fromDbObject(o));
 			}
 			double gjennomsnitt = antallRating > 0 ? (double) totalRating / (double) antallRating : 0;
 
-			System.out.println(String.format("antallRating=%S, totalRating=%s, gjennomsnitt=%s", antallRating, totalRating, gjennomsnitt));
-
-			return new FeedbackSummary(antallRating, gjennomsnitt, comments);
+			return new FeedbackSummary(antallRating, gjennomsnitt, comments, details);
 		} finally {
 			cursor.close();
 		}

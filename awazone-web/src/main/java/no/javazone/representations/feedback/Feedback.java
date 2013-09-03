@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.joda.time.DateTime;
 
 import com.google.common.base.Function;
 import com.mongodb.BasicDBObject;
@@ -64,6 +65,7 @@ public class Feedback {
 
 	public static DBObject toMongoObject(final Feedback feedback, final String talkId, final String ip, final String userAgent) {
 		return new BasicDBObject()
+				.append("time", DateTime.now().toString())
 				.append("talkId", talkId)
 				.append("rating", feedback.rating)
 				.append("comment", feedback.comment)
