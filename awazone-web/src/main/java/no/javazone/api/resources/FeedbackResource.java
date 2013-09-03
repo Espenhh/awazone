@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -32,7 +33,7 @@ public class FeedbackResource {
 		Map<String, List<Feedback>> feedbacks = feedbackService.getAllFeedbacks();
 		return Response.ok(feedbacks).build();
 	}
-	
+
 	@GET
 	@Path("/{talkId}")
 	@Produces(APPLICATION_JSON)
@@ -53,8 +54,9 @@ public class FeedbackResource {
 	@Path("/{talkId}")
 	@Produces(APPLICATION_JSON)
 	@Consumes(APPLICATION_JSON)
-	public Response postNewFeedback(@PathParam("talkId") final String talkId, final Feedback feedback) {
-		feedbackService.addFeedbackForTalk(talkId, feedback);
+	public Response postNewFeedback(@PathParam("talkId") final String talkId, @HeaderParam("X-Forwarded-For") final String ip,
+			@HeaderParam("User-Agent") final String userAgent, final Feedback feedback) {
+		feedbackService.addFeedbackForTalk(talkId, ip, userAgent, feedback);
 		return Response.ok().build();
 	}
 }

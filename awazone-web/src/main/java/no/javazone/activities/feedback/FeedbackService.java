@@ -81,12 +81,16 @@ public class FeedbackService {
 		return res;
 	}
 
-	public void addFeedbackForTalk(final String talkId, final Feedback feedback) {
+	public void addFeedbackForTalk(final String talkId, final String ip, final String userAgent, final Feedback feedback) {
 		if (!feedback.validate()) {
+			LOG.warn(String.format("Postet feedback som ikke validerte. talkId=%s, rating=%s, comment=%s, ip=%s, userAgent=%s", talkId,
+					feedback.rating, feedback.comment, ip, userAgent));
 			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("Ikke gyldig feedback!").build());
 		}
 
-		collection.insert(feedback.toMongoObject(talkId));
+		LOG.info(String.format("Lagrer feedback. talkId=%s, rating=%s, comment=%s, ip=%s, userAgent=%s", talkId, feedback.rating,
+				feedback.comment, ip, userAgent));
+		collection.insert(Feedback.toMongoObject(feedback, talkId, ip, userAgent));
 	}
 
 	public static FeedbackService getInstance() {

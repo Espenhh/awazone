@@ -37,10 +37,6 @@ public class Feedback {
 		}
 	}
 
-	public DBObject toMongoObject(final String talkId) {
-		return new BasicDBObject().append("talkId", talkId).append("rating", rating).append("comment", comment);
-	}
-
 	public static ArrayList<Feedback> convertFromMongo(final List<DBObject> feedbacksFromDb) {
 		return newArrayList(transform(feedbacksFromDb, new Function<DBObject, Feedback>() {
 			@Override
@@ -64,6 +60,15 @@ public class Feedback {
 				return new Feedback(rating, comment);
 			}
 		}));
+	}
+
+	public static DBObject toMongoObject(final Feedback feedback, final String talkId, final String ip, final String userAgent) {
+		return new BasicDBObject()
+				.append("talkId", talkId)
+				.append("rating", feedback.rating)
+				.append("comment", feedback.comment)
+				.append("ip", ip)
+				.append("userAgent", userAgent);
 	}
 
 }
