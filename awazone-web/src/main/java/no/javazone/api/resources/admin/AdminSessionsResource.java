@@ -27,7 +27,7 @@ public class AdminSessionsResource {
 
 	@GET
 	@Produces(APPLICATION_JSON)
-	public Response getSimpleAdminSessions(@HeaderParam("secret") final String secret) {
+	public Response getSimpleAdminSessions(@HeaderParam("X-Jz-Secret") final String secret) {
 		checkSecret(secret);
 		List<AdminSimpleSession> simpleSessions = sessionsActivity.getSimpleSessionsAdmin();
 		return Response.ok(simpleSessions).build();

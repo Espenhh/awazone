@@ -29,7 +29,7 @@ public class AdminFeedbackResource {
 
 	@GET
 	@Produces(APPLICATION_JSON)
-	public Response getAllFeedbacks(@HeaderParam("secret") final String secret) {
+	public Response getAllFeedbacks(@HeaderParam("X-Jz-Secret") final String secret) {
 		checkSecret(secret);
 		Map<String, List<Feedback>> feedbacks = feedbackService.getAllFeedbacks();
 		return Response.ok(feedbacks).build();
@@ -38,7 +38,7 @@ public class AdminFeedbackResource {
 	@GET
 	@Path("/{talkId}")
 	@Produces(APPLICATION_JSON)
-	public Response getFeedbacksFor(@HeaderParam("secret") final String secret, @PathParam("talkId") final String talkId) {
+	public Response getFeedbacksFor(@HeaderParam("X-Jz-Secret") final String secret, @PathParam("talkId") final String talkId) {
 		checkSecret(secret);
 		List<Feedback> feedbacks = feedbackService.getFeedbacksForTalk(talkId);
 		return Response.ok(feedbacks).build();
@@ -47,7 +47,7 @@ public class AdminFeedbackResource {
 	@GET
 	@Path("/{talkId}/summary")
 	@Produces(APPLICATION_JSON)
-	public Response getSummaryFor(@HeaderParam("secret") final String secret, @PathParam("talkId") final String talkId) {
+	public Response getSummaryFor(@HeaderParam("X-Jz-Secret") final String secret, @PathParam("talkId") final String talkId) {
 		checkSecret(secret);
 		String s = feedbackService.getSummaryForTalk(talkId);
 		return Response.ok(s).build();
