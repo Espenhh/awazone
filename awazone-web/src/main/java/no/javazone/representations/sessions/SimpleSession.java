@@ -1,7 +1,6 @@
 package no.javazone.representations.sessions;
 
-import static com.google.common.collect.Lists.newArrayList;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import no.javazone.activities.ems.model.EmsSession;
@@ -59,9 +58,12 @@ public class SimpleSession {
 			}
 
 			private List<Link> createLinks(final EmsSession emsSession) {
-				Link detailsLink = new Link("details", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId());
-				Link feedbackLink = new Link("feedback", PropertiesLoader.getProperty("server.proxy") + "/feedback/" + emsSession.getId());
-				return newArrayList(detailsLink, feedbackLink);
+				List<Link> links = new ArrayList<Link>();
+				links.add(new Link("details", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId()));
+				if (emsSession.feedbackEnabled()) {
+					links.add(new Link("feedback", PropertiesLoader.getProperty("server.proxy") + "/feedback/" + emsSession.getId()));
+				}
+				return links;
 			}
 		};
 	}
