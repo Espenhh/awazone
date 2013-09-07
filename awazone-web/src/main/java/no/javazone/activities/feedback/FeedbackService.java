@@ -1,5 +1,7 @@
 package no.javazone.activities.feedback;
 
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +10,9 @@ import java.util.Map;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
+import no.javazone.activities.ems.EmsService;
+import no.javazone.activities.ems.model.EmsSession;
 import no.javazone.representations.feedback.AdminFeedback;
 import no.javazone.representations.feedback.Feedback;
 import no.javazone.representations.feedback.FeedbackSummary;
@@ -29,6 +32,8 @@ import com.mongodb.MongoClient;
 public class FeedbackService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(FeedbackService.class);
+
+	EmsService emsService = EmsService.getInstance();
 
 	public static FeedbackService instance;
 	private DBCollection collection;
@@ -88,16 +93,22 @@ public class FeedbackService {
 
 	public void addFeedbackForTalk(final String talkId, final String ip, final String userAgent, final Feedback feedback) {
 		String realIp = ip.split(",")[0];
+		String logInfo = String.format("talkId=%s, rating=%s, comment=%s, ip=%s, userAgent=%s", talkId, feedback.rating, feedback.comment,
+				realIp, userAgent);
 
 		if (!feedback.validate()) {
-			LOG.warn(String.format("Postet feedback som ikke validerte. talkId=%s, rating=%s, comment=%s, ip=%s, userAgent=%s", talkId,
-					feedback.rating, feedback.comment, realIp, userAgent));
-			throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("Ikke gyldig feedback!").build());
+			LOG.warn("Postet feedback som ikke validerte. " + logInfo);
+			throw new WebApplicationException(Response.status(BAD_REQUEST).entity("Ikke gyldig feedback!").build());
 		}
 
-		LOG.info(String.format("Lagrer feedback. talkId=%s, rating=%s, comment=%s, ip=%s, userAgent=%s", talkId, feedback.rating,
-				feedback.comment, realIp, userAgent));
-		collection.insert(Feedback.toMongoObject(feedback, talkId, realIp, userAgent));
+		EmsSession session = emsService.getSession(talkId);
+		if (session == null || !session.feedbackEnabled()) {
+			LOG.warn("Forsøkte å sende inn feedback for talk som ikke enda er åpnet for feedback." + logInfo);
+			throw new WebApplicationException(Response.status(BAD_REQUEST).entity("Feedback for talk ikke åpnet!").build());
+		}
+
+		LOG.info("Lagrer feedback. " + logInfo);
+		collection.insert(Feedback.toMongoObject(feedback, session.getId(), realIp, userAgent));
 	}
 
 	public static FeedbackService getInstance() {
