@@ -14,6 +14,8 @@ import no.javazone.representations.sessions.AdminSimpleSession;
 import no.javazone.representations.sessions.Session;
 import no.javazone.representations.sessions.SimpleSession;
 
+import org.joda.time.DateTime;
+
 public class SessionsActivity {
 
 	private static SessionsActivity instance;
@@ -47,5 +49,9 @@ public class SessionsActivity {
 	public List<AdminSimpleSession> getSimpleSessionsAdmin() {
 		ConferenceYear conferenceYear = emsService.getConferenceYear();
 		return newArrayList(transform(conferenceYear.getSessions(), AdminSimpleSession.emsSessionToAdminSimpleSession()));
+	}
+
+	public boolean statusCheck() {
+		return emsService.getConferenceYear().getLastTimeRefreshed().isAfter(DateTime.now().minusMinutes(10));
 	}
 }

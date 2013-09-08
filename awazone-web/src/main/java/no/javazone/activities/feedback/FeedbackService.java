@@ -147,4 +147,14 @@ public class FeedbackService {
 			cursor.close();
 		}
 	}
+
+	public boolean statusCheck() {
+		try {
+			collection.count();
+			return true;
+		} catch (Exception e) {
+			LOG.warn("Feil ved ping av mongo", e);
+			return false;
+		}
+	}
 }
