@@ -67,7 +67,7 @@ public class Session {
 
 	private static List<Link> createLinks(final EmsSession emsSession) {
 		List<Link> links = new ArrayList<Link>();
-		links.add(new Link("self", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId()));
+		links.add(new Link("details", PropertiesLoader.getProperty("server.proxy") + "/sessions/" + emsSession.getId()));
 		if (emsSession.feedbackEnabled()) {
 			links.add(new Link("feedback", PropertiesLoader.getProperty("server.proxy") + "/feedback/" + emsSession.getId()));
 		}
