@@ -71,6 +71,9 @@ public class Session {
 		if (emsSession.feedbackEnabled()) {
 			links.add(new Link("feedback", PropertiesLoader.getProperty("server.proxy") + "/feedback/" + emsSession.getId()));
 		}
+		if (emsSession.getVideoLink().isSome()) {
+			links.add(new Link("video", emsSession.getVideoLink().get().getHref().toString()));
+		}
 		return links;
 	}
 

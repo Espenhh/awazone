@@ -39,11 +39,12 @@ public class EmsSession {
 	private final List<String> speakerNames;
 	private final Optional<Link> speakerLink;
 	private List<EmsSpeaker> speakerDetails;
+	private final Optional<Link> videoLink;
 
 	public EmsSession(final String id, final String title, final String summary, final String outline, final String body,
 			final String format, final String audience, final String level, final String lang, final String room, final String start,
 			final LocalDateTime startDateTime, final String stop, final List<String> keywords, final List<String> speakerNames,
-			final Optional<Link> speakerLink) {
+			final Optional<Link> speakerLink, final Optional<Link> videoLink) {
 		this.id = id;
 		this.title = title;
 		this.summary = summary;
@@ -60,6 +61,7 @@ public class EmsSession {
 		this.keywords = keywords;
 		this.speakerNames = speakerNames;
 		this.speakerLink = speakerLink;
+		this.videoLink = videoLink;
 	}
 
 	public String getId() {
@@ -122,6 +124,10 @@ public class EmsSession {
 		return speakerLink;
 	}
 
+	public Optional<Link> getVideoLink() {
+		return videoLink;
+	}
+
 	public List<EmsSpeaker> getSpeakerDetails() {
 		return speakerDetails;
 	}
@@ -171,8 +177,10 @@ public class EmsSession {
 
 				Optional<Link> speakerLink = ItemHelper.getLink(item, "speaker collection");
 
+				Optional<Link> videoLink = ItemHelper.getLink(item, "alternate video");
+
 				return new EmsSession(id, title, summary, outline, body, format, audience, level, lang, room, start, startDateTime, stop,
-						keywords, speakerNames, speakerLink);
+						keywords, speakerNames, speakerLink, videoLink);
 			}
 
 			private String extractSlotString(final Item item) {
