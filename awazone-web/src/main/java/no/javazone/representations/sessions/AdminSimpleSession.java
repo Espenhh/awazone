@@ -5,7 +5,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import java.util.List;
 
 import no.javazone.activities.ems.model.EmsSession;
-import no.javazone.activities.feedback.FeedbackService;
+import no.javazone.activities.feedback.SpeakerFeedbackService;
 import no.javazone.representations.Link;
 import no.javazone.representations.feedback.FeedbackSummary;
 import no.javazone.server.PropertiesLoader;
@@ -61,7 +61,7 @@ public class AdminSimpleSession {
 			public AdminSimpleSession apply(final EmsSession emsSession) {
 
 				// TODO: burde gjøres ute i servicen isteden...
-				FeedbackSummary feedback = FeedbackService.getInstance().getFeedbackSummaryForTalk(emsSession.getId());
+				FeedbackSummary feedback = SpeakerFeedbackService.getInstance().getFeedbackSummaryForTalk(emsSession.getId());
 
 				return new AdminSimpleSession(emsSession.getTitle(), emsSession.getFormat(), emsSession.getLevel(), emsSession.getLang(),
 						emsSession.getRoom(), emsSession.getStart(), emsSession.getStop(), emsSession.getKeywords(),

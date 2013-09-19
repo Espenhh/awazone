@@ -9,13 +9,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import no.javazone.activities.ems.SessionsActivity;
-import no.javazone.activities.feedback.FeedbackService;
+import no.javazone.activities.feedback.SpeakerFeedbackService;
 
 @Path("/ping")
 public class PingResource {
 
 	SessionsActivity sessionsActivity = SessionsActivity.getInstance();
-	FeedbackService feedbackService = FeedbackService.getInstance();
+	SpeakerFeedbackService feedbackService = SpeakerFeedbackService.getInstance();
 
 	@GET
 	@Produces(TEXT_PLAIN)

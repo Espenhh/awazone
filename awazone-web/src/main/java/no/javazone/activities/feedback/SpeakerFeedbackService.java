@@ -29,29 +29,29 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
-public class FeedbackService {
+public class SpeakerFeedbackService {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FeedbackService.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SpeakerFeedbackService.class);
 
 	EmsService emsService = EmsService.getInstance();
 
-	public static FeedbackService instance;
-	private DBCollection collection;
+	public static SpeakerFeedbackService instance;
+	private DBCollection talkFeedbackMongoCollection;
 
-	public FeedbackService() {
+	public SpeakerFeedbackService() {
 		MongoClient mongoClient;
 		try {
 			mongoClient = new MongoClient("localhost", 27017);
 			String namespace = PropertiesLoader.getProperty("mongodb.namespace");
 			DB db = mongoClient.getDB(namespace);
-			collection = db.getCollection("feedback");
+			talkFeedbackMongoCollection = db.getCollection("feedback");
 		} catch (UnknownHostException e) {
 			LOG.warn("Kunne ikke starte MongoDB-klient!", e);
 		}
 	}
 
 	public List<Feedback> getFeedbacksForTalk(final String talkId) {
-		DBCursor cursor = collection.find(new BasicDBObject("talkId", talkId));
+		DBCursor cursor = talkFeedbackMongoCollection.find(new BasicDBObject("talkId", talkId));
 
 		try {
 			System.out.println("Fant " + cursor.size() + " feedbacks som matcher talkid " + talkId);
@@ -73,7 +73,7 @@ public class FeedbackService {
 		groupFields.put("average_rating", new BasicDBObject("$avg", "$rating"));
 		DBObject group = new BasicDBObject("$group", groupFields);
 
-		AggregationOutput output = collection.aggregate(match, group);
+		AggregationOutput output = talkFeedbackMongoCollection.aggregate(match, group);
 
 		Iterable<DBObject> results = output.results();
 		System.out.println(results);
@@ -83,7 +83,7 @@ public class FeedbackService {
 
 	@SuppressWarnings("unchecked")
 	public Map<String, List<Feedback>> getAllFeedbacks() {
-		List<String> talkIds = collection.distinct("talkId");
+		List<String> talkIds = talkFeedbackMongoCollection.distinct("talkId");
 		Map<String, List<Feedback>> res = new HashMap<String, List<Feedback>>();
 		for (String talkId : talkIds) {
 			res.put(talkId, getFeedbacksForTalk(talkId));
@@ -108,18 +108,18 @@ public class FeedbackService {
 		}
 
 		LOG.info("Lagrer feedback. " + logInfo);
-		collection.insert(Feedback.toMongoObject(feedback, session.getId(), realIp, userAgent));
+		talkFeedbackMongoCollection.insert(Feedback.toMongoObject(feedback, session.getId(), realIp, userAgent));
 	}
 
-	public static FeedbackService getInstance() {
+	public static SpeakerFeedbackService getInstance() {
 		if (instance == null) {
-			instance = new FeedbackService();
+			instance = new SpeakerFeedbackService();
 		}
 		return instance;
 	}
 
 	public FeedbackSummary getFeedbackSummaryForTalk(final String talkId) {
-		DBCursor cursor = collection.find(new BasicDBObject("talkId", talkId));
+		DBCursor cursor = talkFeedbackMongoCollection.find(new BasicDBObject("talkId", talkId));
 
 		// TODO: gjøre noe av dette med mongo direkte? :)
 		int antallRating = 0;
@@ -150,7 +150,7 @@ public class FeedbackService {
 
 	public boolean statusCheck() {
 		try {
-			collection.count();
+			talkFeedbackMongoCollection.count();
 			return true;
 		} catch (Exception e) {
 			LOG.warn("Feil ved ping av mongo", e);

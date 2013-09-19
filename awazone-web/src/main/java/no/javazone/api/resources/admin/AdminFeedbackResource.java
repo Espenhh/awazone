@@ -14,7 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import no.javazone.activities.feedback.FeedbackService;
+import no.javazone.activities.feedback.SpeakerFeedbackService;
 import no.javazone.api.filters.NoCacheResponseFilter;
 import no.javazone.representations.feedback.Feedback;
 import no.javazone.server.PropertiesLoader;
@@ -25,7 +25,7 @@ import com.sun.jersey.spi.container.ResourceFilters;
 @ResourceFilters(NoCacheResponseFilter.class)
 public class AdminFeedbackResource {
 
-	private final FeedbackService feedbackService = FeedbackService.getInstance();
+	private final SpeakerFeedbackService feedbackService = SpeakerFeedbackService.getInstance();
 
 	@GET
 	@Produces(APPLICATION_JSON)
